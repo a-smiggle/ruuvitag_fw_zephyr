@@ -15,5 +15,4 @@ supported:
   - spi
   - counter
   - nvs
-  - i2c
   - watchdog
