@@ -77,7 +77,7 @@
 &i2c0 {
 	compatible = "nordic,nrf-twi";
 	status = "okay";
-	/* sda-pin = <26>; */
+	/sda-pin = <4>;
 	/* scl-pin = <27>; */
 
 	lis2dh12: lis2dh12@19 {
