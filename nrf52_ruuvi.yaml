@@ -16,3 +16,5 @@ supported:
   - counter
   - nvs
   - watchdog
+  - bme280
+  - lis2dh
