@@ -18,4 +18,3 @@ supported:
   - nvs
   - watchdog
   - bme280
-  - lis2dh
