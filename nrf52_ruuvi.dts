@@ -77,12 +77,12 @@
 
 
 &i2c0 {
-	/*compatible = "nordic,nrf-twi";*/
+	/* compatible = "nordic,nrf-twi"; */
 	status = "okay";
-	/*sda-pin = <4>;*/
+	/* sda-pin = <26>; */
 	/* scl-pin = <27>; */
-/*
-	lis2dh12: lis2dh12@19 {
+
+	/*lis2dh12: lis2dh12@19 {
 		compatible = "st,lis2dh12", "st,lis2dh";
 		reg = <0x19>;
 		irq-gpios = <&gpio0 12 GPIO_INT_ACTIVE_HIGH>;
