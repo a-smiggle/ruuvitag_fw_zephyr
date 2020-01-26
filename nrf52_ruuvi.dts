@@ -69,31 +69,39 @@
 	status = "okay";
 	compatible = "nordic,nrf-uart";
 	current-speed = <115200>;
-	tx-pin = <4>;
-	rx-pin = <5>;
+	tx-pin = <5>;
+	rx-pin = <4>;
+	cts-pin = <31>;
+	rts-pin = <30>;
 };
 
 
 &i2c0 {
-	/* compatible = "nordic,nrf-twi"; */
+	compatible = "nordic,nrf-twim"; 
 	status = "okay";
-	/* sda-pin = <26>; */
-	/* scl-pin = <27>; */
+	clock-frequency = <I2C_BITRATE_FAST>;
+	sda-pin = <20>;
+	scl-pin = <19>;
 
-	/*lis2dh12: lis2dh12@19 {
-		compatible = "st,lis2dh12", "st,lis2dh";
-		reg = <0x19>;
-		irq-gpios = <&gpio0 12 GPIO_INT_ACTIVE_HIGH>;
-		label = "LIS2DH12-ACCEL";
-	};*/
+	
 };
 
 &spi0 {
 	compatible = "nordic,nrf-spi";
+	/* Cannot be used together with i2c0. */
 	status = "okay";
 	sck-pin = <29>;
 	mosi-pin = <25>;
-	miso-pin = <29>;
+	miso-pin = <28>;
+
+	lis2dh12@19 {
+		compatible = "st,lis2dh", "st,lis2dh-spi";
+		reg = <0x19>;
+		spi-max-frequency = <250000>;
+		irq-gpios = <&gpio0 12 0>, <&gpio0 11 0>;
+		#cs-gpios = <&gpio0 2 0>;
+		label = "LIS2DH12";
+	};
 };
 
 &flash0 {
