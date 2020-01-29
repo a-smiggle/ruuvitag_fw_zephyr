@@ -24,6 +24,13 @@
 		zephyr,code-partition = &slot0_partition;
 	};
 
+/* These aliases are provided for compatibility with samples */
+	aliases {
+		led0 = &led0;
+		led1 = &led1;
+		sw0 = &button0;
+	};
+
 	leds {
 		compatible = "gpio-leds";
 		led0: led_0 {
@@ -36,7 +43,6 @@
 		};
 	};
 
-
 	buttons {
 		compatible = "gpio-keys";
 		button0: button_0 {
@@ -45,12 +51,7 @@
 		};
 	};
 
-	/* These aliases are provided for compatibility with samples */
-	aliases {
-		led0 = &led0;
-		led1 = &led1;
-		sw0 = &button0;
-	};
+	
 };
 
 &adc {
@@ -75,16 +76,23 @@
 	rts-pin = <30>;
 };
 
-
+/*
 &i2c0 {
-	compatible = "nordic,nrf-twim"; 
+	compatible = "nordic,nrf-twi"; 
 	status = "okay";
 	clock-frequency = <I2C_BITRATE_FAST>;
 	sda-pin = <20>;
 	scl-pin = <19>;
 
-	
-};
+	/*lis2dh12@19 {
+		compatible = "st,lis2dh";
+		reg = <0x19>;
+		irq-gpios = <&gpio0 2 0>, <&gpio0 6 0>;
+		
+		label = "LIS2DH12";
+	};
+
+};*/
 
 &spi0 {
 	compatible = "nordic,nrf-spi";
@@ -93,16 +101,27 @@
 	sck-pin = <29>;
 	mosi-pin = <25>;
 	miso-pin = <28>;
+	cs-pin = <2>;
+    cs-gpios = <&gpio0 3 0>, <&gpio0 8 0>;
 
-	lis2dh12@19 {
-		compatible = "st,lis2dh", "st,lis2dh-spi";
-		reg = <0x19>;
-		spi-max-frequency = <250000>;
-		irq-gpios = <&gpio0 12 0>, <&gpio0 11 0>;
-		#cs-gpios = <&gpio0 2 0>;
-		label = "LIS2DH12";
+	bme280@0 {
+		compatible = "bosch,bme280";
+		reg = <0x00>;
+		spi-max-frequency = <10000000>;
+		label= "BME280";
 	};
+	
+	lis2dh@1 {
+		compatible = "st,lis2dh";
+		reg = <0x01>;
+		spi-max-frequency = <10000000>;
+		irq-gpios = <&gpio0 12 GPIO_INT_ACTIVE_HIGH>, <&gpio0 11 GPIO_INT_ACTIVE_HIGH>;
+		label = "LIS2DH";
+	};
+
+	
 };
+
 
 &flash0 {
 	/*
