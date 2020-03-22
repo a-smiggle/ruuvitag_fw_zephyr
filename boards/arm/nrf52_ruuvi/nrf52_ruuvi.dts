@@ -1,10 +1,3 @@
-/*
- * Copyright (c) 2017 Shawn Nock <shawn@monadnock.ca>
- * Copyright (c) 2017 Linaro Limited
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 /dts-v1/;
 #include <nordic/nrf52832_qfaa.dtsi>
 
@@ -46,7 +39,7 @@
 	buttons {
 		compatible = "gpio-keys";
 		button0: button_0 {
-			gpios = <&gpio0 13 GPIO_PUD_PULL_UP>;
+			gpios = <&gpio0 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 			label = "Push button switch 0";
 		};
 	};
@@ -93,7 +86,7 @@
 	mosi-pin = <25>;
 	miso-pin = <28>;
 	#cs-pin = <2>;								/* Not sure if needed */
-    #cs-gpios = <&gpio0 3 0>, <&gpio0 8 0>;		/* Not sure if needed */
+    cs-gpios = <&gpio0 3 0>,  <&gpio0 8 0>;		/* Not sure if needed */
 
 	bme280@0 {
 		compatible = "bosch,bme280";
@@ -102,12 +95,12 @@
 		label= "BME280";
 	};
 	
-	lis2dh@1 {
-		compatible = "st,lis2dh";
+	lis2dh12: lis2dh12@1 {
+		compatible = "st,lis2dh", "st,lis2dh12";
 		reg = <0x01>;
 		spi-max-frequency = <10000000>;
-		irq-gpios = <&gpio0 2 GPIO_INT_ACTIVE_HIGH>;
-		label = "LIS2DH";
+		irq-gpios = <&gpio0 12 GPIO_INT_ACTIVE_LOW>;
+		label = "LIS2DH12-ACCEL";
 	};
 
 	

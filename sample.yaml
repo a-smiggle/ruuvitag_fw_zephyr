@@ -1,0 +1,8 @@
+sample:
+  name: Ruuvitag
+tests:
+  test_build:
+    build_only: true
+    build_on_all: true
+    platform_whitelist: nrf52_ruuvitag
+    tags: ci_build

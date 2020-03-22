@@ -1,0 +1,109 @@
+manifest:
+  defaults:
+    remote: zephyr
+
+  remotes:
+    - name: ruuvi
+      url-base: https://github.com/theBASTI0N
+    - name: zephyr
+      url-base: https://github.com/zephyrproject-rtos
+    
+  projects:
+    - name: zephyr
+      west-commands: scripts/west-commands.yml
+    - name: hal_atmel
+      revision: 5690f5b84495c8b657ff204c5c827df1ab9e12e3
+      path: modules/hal/atmel
+    - name: canopennode
+      path: modules/lib/canopennode
+      revision: 5c6b0566d56264efd4bf23ed58bc7cb8b32fe063
+    - name: ci-tools
+      revision: 84334a4fdcd3dd8078b3ba20f7ba4efe2a2ad952
+      path: tools/ci-tools
+    - name: civetweb
+      revision: 99129c5efc907ea613c4b73ccff07581feb58a7a
+      path: modules/lib/civetweb
+    - name: esp-idf
+      revision: 6835bfc741bf15e98fb7971293913f770df6081f
+      path: modules/hal/esp-idf
+    - name: fatfs
+      revision: 9ee6b9b9511151d0d64a74d532d39c6f2bbd4f16
+      path: modules/fs/fatfs
+    - name: hal_cypress
+      revision: a12d92816a53a521d79cefcf5c38b9dc8a4fed6e
+      path: modules/hal/cypress
+    - name: hal_nordic
+      revision: 72a785c1f3c25bc98cb5eb90914d19718b6ae4ee
+      path: modules/hal/nordic
+    - name: hal_openisa
+      revision: 9bfbe35aad79fdf552dbdae47a894e26be7c022c
+      path: modules/hal/openisa
+    - name: hal_microchip
+      revision: 85302959c0c659311cf90ac51d133e5ce19c9288
+      path: modules/hal/microchip
+    - name: hal_silabs
+      revision: ff34fe15b64f82ce7ed507cccae75877c540d9ab
+      path: modules/hal/silabs
+    - name: hal_st
+      revision: fa481784b3c49780f18d50bafe00390ccb62b2ec
+      path: modules/hal/st
+    - name: hal_stm32
+      revision: 94d735c2613f5d17b64b78a15f0b0191e4474eb0
+      path: modules/hal/stm32
+    - name: hal_ti
+      revision: c9fd9faeaba28c23998a83b37054805259dd8de8
+      path: modules/hal/ti
+    - name: libmetal
+      revision: 45e630d6152824f807d3f919958605c4626cbdff
+      path: modules/hal/libmetal
+    - name: lvgl
+      revision: 74fc2e753a997bd71cefa34dd9c56dcb954b42e2
+      path: modules/lib/gui/lvgl
+    - name: mbedtls
+      revision: 3776c158fe138a72c97c187e4d31c81c37884be9
+      path: modules/crypto/mbedtls
+    - name: mcuboot
+      revision: 54c1e3fb6ba4dcf7b315943bcfcda1e10a4042f5
+      path: bootloader/mcuboot
+    - name: mcumgr
+      revision: d4e97cd4fc80ff949415062b1c83fd42929e8fe4
+      path: modules/lib/mcumgr
+    - name: net-tools
+      revision: 30b7efa827b04d2e47840716b0372737fe7d6c92
+      path: tools/net-tools
+    - name: hal_nxp
+      revision: 62b46313b8e07e2d5062fd62f14ee9dfeb201b76
+      path: modules/hal/nxp
+    - name: open-amp
+      revision: 9b591b289e1f37339bd038b5a1f0e6c8ad39c63a
+      path: modules/lib/open-amp
+    - name: loramac-node
+      revision: 29e516ec585b1a909af2b5f1c60d83e7d4d563e3
+      path: modules/lib/loramac-node
+    - name: openthread
+      revision: 3c6191eb4e8ca44b5f4eeaa696837bce14e83c69
+      path: modules/lib/openthread
+    - name: segger
+      revision: 6fcf61606d6012d2c44129edc033f59331e268bc
+      path: modules/debug/segger
+    - name: tinycbor
+      path: modules/lib/tinycbor
+      revision: 0fc68fceacd1efc1ce809c5880c380f3d98b7b6e
+    - name: littlefs
+      path: modules/fs/littlefs
+      revision: fe9572dd5a9fcf93a249daa4233012692bd2881d
+    - name: mipi-sys-t
+      path: modules/debug/mipi-sys-t
+      revision: baf51863f19f009b92e762115ba5572a5b996b92
+    - name: nrf_hw_models
+      path: modules/bsim_hw_models/nrf_hw_models
+      revision: fec69703cb1ca06fcdab6d5fde01274f0fc5c759
+    - name: hal_xtensa
+      revision: 382b309b481adc85dd517d50b8a458bcb86f15d4
+      path: modules/hal/xtensa
+    - name: edtt
+      path: tools/edtt
+      revision: dd4dd502ef2fbeced6ef7faaba562a7ddca45632
+  
+  self:
+    path: ruuvitag

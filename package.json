@@ -1,0 +1,57 @@
+{
+  "name": "@theBASTI0N/zephyr-ruuvi",
+  "version": "0.0.0-development",
+  "description": "Ruuvitag application built using Zephyr OS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theBASTI0N/zephyr-ruuvi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theBASTI0N/zephyr-ruuvi/issues"
+  },
+  "homepage": "https://theBASTI0N.github.io/",
+  "keywords": [
+    "Cloud",
+    "IoT",
+    "ruuvi",
+    "ble"
+  ],
+  "author": "theBASTI0N",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "husky": "^4.2.1",
+    "semantic-release": "^17.0.2",
+    "standard": "^14.3.1",
+    "stream-buffers": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e"
+    }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "remoteTags": true,
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "/home/runner/work/ruuvi.node_nrf91.c/ruuvi.node_nrf91.c/ruuvi-node-nrf9160_pca10090ns.hex",
+              "name": "ruuvi-node-PCA10090-nRF9160DK-${nextRelease.gitTag}.hex",
+              "label": "Pre-build HEX file for PCA10090 / nRF9160 DK (${nextRelease.gitTag}) NB-IoT"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}
