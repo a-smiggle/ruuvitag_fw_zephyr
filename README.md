@@ -19,6 +19,16 @@ git clone https://github.com/theBASTI0N/zephyr-ruuvi.git ruuvi
 cd ruuvi
 
 ```
+
+### Build
+```bash
+#navigate to:
+cd ~/zephyrproject/ruuvi
+west build
+#flash your board
+west flash
+```
+
 ## Fresh Install
 
 ```bash
@@ -27,16 +37,14 @@ mkdir ruuvi_zephyr
 cd ruuvi_zephyr
 west init -m https://github.com/theBASTI0N/zephyr-ruuvi
 west update
-pip3 install -r /zephyr/scripts/requirements.txt
+pip3 install -r zephyr/scripts/requirements.txt
 ```
 
-You can then test that it works with a sample application.
-
+### Build
 ```bash
-#naviagte to:
-cd ~/zephyrproject/zephyr
-#build the basic blinky application for ruuvi
-west build -b nrf52_ruuvi samples/basic/blinky
+#navigate to:
+cd ~/ruuvi_zephyr/ruuvi
+west build
 #flash your board
 west flash
 ```
