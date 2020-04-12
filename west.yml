@@ -10,6 +10,7 @@ manifest:
 
   projects:
     - name: zephyr
+      revision: e55f1987a0b7ad762502f854847ca5a754dd7129
       west-commands: scripts/west-commands.yml
     - name: cmsis
       revision: 026671fc99ef7e3ca94a575f89210fce5a94747d

@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2017 Linaro Limited
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #include <zephyr.h>
 #include <device.h>
 #include <drivers/sensor.h>
@@ -52,19 +46,19 @@ static int get_tx_power()
 	}
 	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_4)){
 		return -4;
-	} 
+	}
 	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_8)){
 		return -8;
-	} 
+	}
 	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_12)){
 		return -12;
-	} 
+	}
 	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_16)){
 		return -16;
 	}
 	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_20)){
 		return -20;
-	}  
+	}
     else{
 		return 0;
 	}
@@ -90,8 +84,6 @@ static const struct bt_data ad[] = {
 static const struct bt_data sd[] = {
 	BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LEN),
 };
-
-
 
 static void bt_ready(int err)
 {
@@ -134,7 +126,7 @@ static int process_bme280(struct device *dev, struct sensor_value *val)
 		return -1;
 	}
 
-	
+
 	return 0;
 }
 
@@ -169,7 +161,6 @@ static void trigger_handler(struct device *lis2dh_dev,
 }
 #endif
 
-
 static void sensor_handler(void)
 {
 	struct sensor_value lis2dh_val[3];
@@ -185,7 +176,7 @@ static void sensor_handler(void)
 	int32_t x = (uint32_t)(sensor_value_to_double(&lis2dh_val[0]) * 1000);
 	int32_t y = (uint32_t)(sensor_value_to_double(&lis2dh_val[1]) * 1000);
 	int32_t z = (uint32_t)(sensor_value_to_double(&lis2dh_val[2]) * 1000);
-	
+
 	mfg_data[3] = ((t)>>8);
 	mfg_data[4] = ((t) & 0xFF);
 	mfg_data[5] = ((h)>>8);
@@ -205,7 +196,7 @@ static void sensor_handler(void)
 	if (packet_counter%10 == 0){
 		flash_green(); //Flash Green every 10 packets
 	}
-	
+
 }
 
 static void sensor_init(void)
@@ -256,7 +247,7 @@ static void sensor_init(void)
 		}
 		printk("Trigger Set\n");
 	}
-#endif 
+#endif
 }
 
 void main(void)
@@ -276,11 +267,10 @@ void main(void)
 	
 	printf("TX Power set to: %d \n", tx_power);
 
-
 	while (true) {
 		++packet_counter;
 		sensor_handler();
-		
+
 		// update adv data
 		bt_le_adv_update_data(ad, ARRAY_SIZE(ad), NULL, 0);
 		k_sleep(K_SECONDS(SLEEP_TIME));
