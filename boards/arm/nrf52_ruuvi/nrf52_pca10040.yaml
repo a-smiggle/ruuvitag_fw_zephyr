@@ -1,0 +1,18 @@
+identifier: nrf52_ruuvi
+name: nRF52-RUUVI
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+ram: 64
+flash: 512
+supported:
+  - adc
+  - counter
+  - nvs
+  - i2c
+  - pwm
+  - spi
+  - watchdog

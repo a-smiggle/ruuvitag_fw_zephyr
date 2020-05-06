@@ -3,6 +3,8 @@
 # Copyright (c) 2016 Nordic Semiconductor ASA
 # SPDX-License-Identifier: Apache-2.0
 
-config BOARD_NRF52_RUUVI
-	bool "nRF52 RUUVI"
-	depends on SOC_NRF52832_QFAA
+config BOARD_ENABLE_DCDC
+	bool "Enable DCDC mode"
+	select SOC_DCDC_NRF52X
+	default y
+	depends on BOARD_NRF52_RUUVI

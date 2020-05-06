@@ -69,14 +69,6 @@
 	rts-pin = <30>;
 };
 
-&i2c0 {
-	compatible = "nordic,nrf-twi";
-	status = "okay";
-	sda-pin = <20>;
-	scl-pin = <19>;
-
-};
-
 &spi0 {
 	compatible = "nordic,nrf-spi";
 	/* Cannot be used together with i2c0. */
@@ -84,19 +76,20 @@
 	sck-pin = <29>;
 	mosi-pin = <25>;
 	miso-pin = <28>;
-  cs-gpios = <&gpio0 3 0>,  <&gpio0 8 0>;		/* Not sure if needed */
+  	cs-gpios = <&gpio0 3 0>, <&gpio0 8 0>;		/* Not sure if needed */
 
 	bme280@0 {
 		compatible = "bosch,bme280";
-		reg = <0x00>;
+		reg = <0>;
 		spi-max-frequency = <10000000>;
 		label= "BME280";
 	};
+	
 	lis2dh12: lis2dh12@1 {
 		compatible = "st,lis2dh", "st,lis2dh12";
-		reg = <0x01>;
+		reg = <1>;
 		spi-max-frequency = <10000000>;
-		irq-gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+		irq-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
 		label = "LIS2DH12-ACCEL";
 	};
 };
