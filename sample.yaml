@@ -1,8 +1,8 @@
 sample:
-  name: Ruuvitag
+  description: Ruuvi Ruuvitag Weather Station sample
+  name: weather station
 tests:
-  test_build:
-    build_only: true
-    build_on_all: true
-    platform_whitelist: nrf52_ruuvitag
-    tags: ci_build
+  sample.board.ruuvi_ruuvitag.weather_station:
+    platform_whitelist: ruuvi_ruuvitag
+    tags: samples sensor
+    harness: sensor

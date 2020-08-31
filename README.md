@@ -2,7 +2,9 @@
 
 This includes the files need to make your Ruuvi work with Zephyr OS.
 
-This has been developed using Zephyr OS v2.2.0.
+This has been developed using Zephyr OS v2.3.99.
+
+On 2.4.0 release development will remain on that release as Ruuvitag will be incorporated into repo.
 
 # Usage
 
