@@ -12,12 +12,4 @@
 void get_id(char *serial_number);
 void get_mac(mac_address_bin_t *mac);
 
-#ifdef __cplusplus
-}
-#endif
-
-/**
- *@}
- */
-
 #endif /* BOARD_INFO_H_ */

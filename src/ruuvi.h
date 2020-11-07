@@ -47,13 +47,4 @@ typedef struct mac_address_bin
 #define SW0_GPIO_FLAGS	0
 #endif
 
-
-#ifdef __cplusplus
-}
-#endif
-
-/**
- *@}
- */
-
 #endif /* RUUVI_H_ */

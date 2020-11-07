@@ -12,12 +12,4 @@ void flash_red(void);
 void toggle_green(uint8_t on);
 void flash_green(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-/**
- *@}
- */
-
 #endif /* LED_HANDLER_H_ */

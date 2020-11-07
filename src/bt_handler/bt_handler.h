@@ -14,12 +14,4 @@ void bt_adv_stop(void);
 
 void bt_mode_switch(bool btn);
 
-#ifdef __cplusplus
-}
-#endif
-
-/**
- *@}
- */
-
 #endif /* BT_HANDLER_H_ */

@@ -13,12 +13,4 @@ uint16_t bme280_get_press(void);
 uint16_t bme280_get_humidity(void);
 bool init_bme280(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-/**
- *@}
- */
-
 #endif /* BME280_HANDLER_H_ */
