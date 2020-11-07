@@ -1,8 +1,0 @@
-sample:
-  description: Ruuvi Ruuvitag Weather Station sample
-  name: weather station
-tests:
-  sample.board.ruuvi_ruuvitag.weather_station:
-    platform_whitelist: ruuvi_ruuvitag
-    tags: samples sensor
-    harness: sensor

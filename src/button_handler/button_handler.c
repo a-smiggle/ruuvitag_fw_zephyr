@@ -6,14 +6,18 @@
 #include "ruuvi.h"
 #include "button_handler.h"
 
-static struct device *button;
+#include <logging/log.h>
+LOG_MODULE_REGISTER(button_handler, CONFIG_RUUVITAG_LOG_LEVEL);
+
+
+const struct device *button;
 
 void button_int_setup(struct gpio_callback *handle, gpio_callback_handler_t cbh){
     int ret = gpio_pin_interrupt_configure(button,
 					   SW0_GPIO_PIN,
 					   GPIO_INT_EDGE_TO_ACTIVE);
 	if (ret != 0) {
-		printk("Error %d: failed to configure interrupt on %s pin %d\n",
+		LOG_ERR("Error %d: failed to configure interrupt on %s pin %d\n",
 			ret, SW0_GPIO_LABEL, SW0_GPIO_PIN);
 		return;
 	}
@@ -37,13 +41,13 @@ void button_init(void)
 {
 	button = device_get_binding(SW0_GPIO_LABEL);
 	if (button == NULL) {
-		printk("Error: didn't find %s device\n", SW0_GPIO_LABEL);
+		LOG_ERR("Error: didn't find %s device\n", SW0_GPIO_LABEL);
 		return;
 	}
 
 	int ret = gpio_pin_configure(button, SW0_GPIO_PIN, SW0_GPIO_FLAGS);
 	if (ret != 0) {
-		printk("Error %d: failed to configure %s pin %d\n",
+		LOG_ERR("Error %d: failed to configure %s pin %d\n",
 		       ret, SW0_GPIO_LABEL, SW0_GPIO_PIN);
 		return;
 	}

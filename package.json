@@ -1,0 +1,64 @@
+{
+  "name": "@theBASTI0N/ruuvitag_fw_zephyr",
+  "version": "0.0.0-development",
+  "description": "Ruuvitag application built using nRF Connect SDK and Zephyr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theBASTI0N/ruuvitag_fw_zephyr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theBASTI0N/ruuvitag_fw_zephyr/issues"
+  },
+  "homepage": "https://github.com/theBASTI0N",
+  "keywords": [
+    "Cloud",
+    "IoT",
+    "ruuvi",
+    "BLE",
+    "Beacon",
+    "NordicSemiconductor"
+  ],
+  "author": "theBASTI0N",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "husky": "^4.2.1",
+    "semantic-release": "^17.0.2",
+    "standard": "^14.3.1",
+    "stream-buffers": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e"
+    }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "remoteTags": true,
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "/home/runner/work/ruuvitag_fw_zephyr/ruuvitag_fw_zephyr/ruuvitag_fw_full.hex",
+              "name": "ruuvitag_fw_full_${nextRelease.gitTag}.hex",
+              "label": "Full build including MCUBOOT (${nextRelease.gitTag})"
+            },
+            {
+              "path": "/home/runner/work/ruuvitag_fw_zephyr/ruuvitag_fw_zephyr/ruuvitag_fw_update.bin",
+              "name": "ruuvitag_fw_dfu_${nextRelease.gitTag}.bin",
+              "label": "DFU compatible image (${nextRelease.gitTag})"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}

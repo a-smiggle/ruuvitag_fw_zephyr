@@ -1,81 +1,63 @@
-# Zephyr Ruuvitag Board Definition
+# ruuvitag_fw_zephyr
+Ruuvitag FW based on Zephyr OS.
 
-This includes the files need to make your Ruuvi work with Zephyr OS.
+# Build Environment
+Ruuvi Node is developed using nRF Connect SDK(NCS) V1.4.0.
 
-This has been developed using Zephyr OS v2.3.99.
+## NCS
+Nordic Semiconductor keeps up-to-date instructions on how to setup the SDK for 
+Linux, Mac OSX and Windows. Instructions can be found at https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.4.0/nrf/getting_started.html
 
-On 2.4.0 release development will remain on that release as Ruuvitag will be incorporated into repo.
-
-# Usage
-
-There are two methods to use this application. If you  already have zephyr instaleld you can clone this repo or if you are starting from fresh you can use west to pull this repo and all required zephyr components.
-
-## Zephyr already installed
-
-It is assumed that you followed the instructions found at:
-https://docs.zephyrproject.org/latest/getting_started/index.html
+# Cloning
+To clone the directory follow the following.
 
 ```bash
-cd ~/zephyrproject
-git clone https://github.com/theBASTI0N/zephyr-ruuvi.git ruuvi
-cd ruuvi
-
+cd ~/ncs/nrf/applications
+git clone https://github.com/theBASTI0N/ruuvitag_fw_zephyr.git
+cd ruuvi.node_nrf91.c
 ```
 
-### Build
-```bash
-#navigate to:
-cd ~/zephyrproject/ruuvi
-west build
-#flash your board
-west flash
-```
+## Note 
+The examples given assume you are using linux.
+All commands assume that nRF Connect SDK has been setup as per the instructions in the above link.
 
-## Fresh Install
+# Building West
+Once in the project directory, make can be used to build the different variances of the firmware and flash them to a board.
 
 ```bash
-cd ~/
-mkdir ruuvi_zephyr
-cd ruuvi_zephyr
-west init -m https://github.com/theBASTI0N/zephyr-ruuvi
-west update
-pip3 install -r zephyr/scripts/requirements.txt
+# Makes the standard FW and flashes it to a connected board.
+make
+
+# Makes the standard FW with or without debugging enabled.
+make app
+make app_debug
+
+# Makes the full FW with or without debugging enabled. (Includes MCUBOOT)
+make app_bootloader
+make app_bootloader_debug
+
+# Flashed the last built FW
+make flash
+
+# Connects to the device to view debu messages
+make connect
+
+# Displays the debug messages
+make debug
+
+# Cleans all build directories
+make clean
 ```
 
-### Build
-```bash
-#navigate to:
-cd ~/ruuvi_zephyr/ruuvi
-west build
-#flash your board
-west flash
-```
+# Remote DFU
+To enable your ruuvitag to receive an update the following can be done:
+- Press B when rebooting the tag.
+- Press B at any time whilst running.
 
-# Prerequisites
+Once in the update mode nRF connect can be used on a phone to update the tag. The process is the same as a standard ruuvitag, however the file need is the update.bin file. This can be found at: ruuvitag_fw_zephyr/build/zephyr/app_update.bin or in the releases.
 
-You will be required to have setup the zephyr development environment on your system.
+## DFU Timeout
+The update mode of the tag will by default time out after 2 minutes. The tag will then start beaconing again.
 
-Follow the instructions in the below links to setup the environment:
-https://docs.zephyrproject.org/latest/getting_started/index.html
-https://docs.zephyrproject.org/latest/guides/west/install.html
-
-## Alternative toolchain
-
-An alternative toolchain can be installed by following the instructions found at:
-https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/gs_installing.html#installing-the-required-tools
-
-You will need to ensure nrfjprog is installed so that the board can be flashed. This is most eaily done via installing nRF Command Line Tools.
-
-To install this download and run the required file for you OS. This can be found at:
-https://www.nordicsemi.com/Software-and-tools/Development-Tools/nRF-Command-Line-Tools
-
-If using linux you may need to add your user to the dialout group to access the serial device. To do this run the following:
-
-```bash
-# On debian
-sudo usermod -a -G dialout $USER
-#On Arch the group is uucp
-sudo usermod -a -G uucp $USER
-#reboot your system for this to take effect
-sudo reboot
-```
+# Note
+The GitHub workflow is adapted from [@bifravst/firmware](https://github.com/bifravst/firmware) and is BSD-5-Clause-Nordic licensed.

@@ -3,9 +3,24 @@
 #include <devicetree.h>
 #include <drivers/sensor.h>
 #include "lis2dh12_handler.h"
+#include <power/power.h>
 
-static struct device *lis2dh12;
+#include <logging/log.h>
+LOG_MODULE_REGISTER(lis2dh12, CONFIG_RUUVITAG_LOG_LEVEL);
+
+const struct device *lis2dh12;
 struct sensor_value acc[3];
+
+int lis2dh12_power_state(bool state){
+	int rc;
+	if(!state){
+		rc = device_set_power_state(lis2dh12, DEVICE_PM_LOW_POWER_STATE, NULL, NULL);
+	}
+	else{
+		rc = device_set_power_state(lis2dh12, DEVICE_PM_ACTIVE_STATE, NULL, NULL);
+	}
+	return rc;
+}
 
 void lis2dh12_fetch(void)
 {
@@ -14,9 +29,9 @@ void lis2dh12_fetch(void)
 	sensor_channel_get(lis2dh12,
 					SENSOR_CHAN_ACCEL_XYZ,
 					acc);
-	//printk("x: %d.%06d, ", acc[0].val1, acc[0].val2);
-	//printk("y: %d.%06d, ", acc[1].val1, acc[1].val2);
-	//printk("z: %d.%06d\n", acc[2].val1, acc[2].val2);
+	//LOG_INF("x: %d.%06d, ", acc[0].val1, acc[0].val2);
+	//LOG_INF("y: %d.%06d, ", acc[1].val1, acc[1].val2);
+	//LOG_INF("z: %d.%06d\n", acc[2].val1, acc[2].val2);
 }
 
 int16_t lis2dh12_get(int axis){
@@ -35,10 +50,10 @@ int16_t lis2dh12_get(int axis){
 }
 
 #ifdef CONFIG_LIS2DH_TRIGGER
-static void trigger_handler(struct device *dev,
+static void trigger_handler(const struct device *dev,
 			    struct sensor_trigger *trig)
 {
-	printk("LIS2DH Trigger");
+	LOG_INF("LIS2DH Trigger");
 }
 #endif
 
@@ -59,18 +74,18 @@ bool init_lis2dh12(void){
 		};
 
 		rc = sensor_attr_set(lis2dh12, trig.chan,
-						SENSOR_ATTR_SAMPLING_FREQUENCY,
+						SENSOR_ATTR_SLOPE_TH,
 						&odr);
 		if (rc != 0) {
-			printk("Failed to set odr: %d\n", rc);
+			LOG_ERR("Failed to set odr: %d\n", rc);
 			return;
 		}
-		printk("Sampling at %u Hz\n", odr.val1);
+		LOG_INF("Sampling at %u Hz\n", odr.val1);
 	}
 
 	rc = sensor_trigger_set(lis2dh12, &trig, trigger_handler);
 	if (rc != 0) {
-		printk("Failed to set trigger: %d\n", rc);
+		LOG_ERR("Failed to set trigger: %d\n", rc);
 		return;
 	}
 #endif

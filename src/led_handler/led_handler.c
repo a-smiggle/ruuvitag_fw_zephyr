@@ -34,8 +34,8 @@
 
 #define LED_TIME	10
 
-static struct device *green_led;
-static struct device *red_led;
+const struct device *green_led;
+const struct device *red_led;
 
 
 void led_init(void)

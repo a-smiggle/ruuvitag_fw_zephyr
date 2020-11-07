@@ -1,0 +1,28 @@
+#
+# Copyright (c) 2018 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-BSD-5-Clause-Nordic
+#
+
+menu "Ruuvitag"
+
+menu "Firmware versioning"
+
+config RUUVITAG_APP_VERSION
+	string "The version of the Ruuvitag firmware"
+	default "0.0.0"
+
+endmenu # Firmware versioning
+
+config RUUVITAG_DFU_TIMEOUT
+	int "The amount of minutes the device will remain connectable to perform a DFU."
+	default 2
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
+
+module = RUUVITAG
+module-str = Ruuvitag
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
