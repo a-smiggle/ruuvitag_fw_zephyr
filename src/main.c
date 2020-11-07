@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 theB@STI0N
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <zephyr.h>
 #include <device.h>
 #include <drivers/sensor.h>

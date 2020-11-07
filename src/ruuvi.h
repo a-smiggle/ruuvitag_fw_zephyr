@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2020 theB@STI0N
+ *
+ * SPDX-License-Identifier: MIT
+ */
+#ifndef RUUVI_H_
+#define RUUVI_H_
+
 #pragma once
 
 #include <zephyr.h>
@@ -38,3 +46,14 @@ typedef struct mac_address_bin
 #define SW0_GPIO_PIN	0
 #define SW0_GPIO_FLAGS	0
 #endif
+
+
+#ifdef __cplusplus
+}
+#endif
+
+/**
+ *@}
+ */
+
+#endif /* RUUVI_H_ */

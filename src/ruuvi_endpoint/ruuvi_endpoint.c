@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 theB@STI0N
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <zephyr.h>
 #include <stdio.h>
 
@@ -49,6 +55,10 @@ static int get_tx_power()
 	}
 }
 
+/*
+ * Adjested from: 
+ * https://github.com/ruuvi/ruuvitag_fw/blob/master/libraries/ruuvi_sensor_formats/ruuvi_endpoints.c
+ */
 static void ruuvi_raw_v2_encode(uint8_t *data){
     data[0]     =   0x99;
     data[1]     =   0x04;
