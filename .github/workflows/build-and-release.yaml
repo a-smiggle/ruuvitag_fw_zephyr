@@ -14,7 +14,7 @@ jobs:
 
       - name: Cache GCC ARM Embed binary
         id: cache-gcc-arm
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.3
         with:
           path: gcc-arm/
           key: ${{ runner.OS }}-gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux
@@ -31,7 +31,7 @@ jobs:
           tar xvfj ${GITHUB_WORKSPACE}/gcc-arm/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2 -C ${GITHUB_WORKSPACE}/gnuarmemb/
 
       - name: Cache Device Tree Compile binary
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.3
         id: cache-dtc
         with:
           path: device-tree-compiler/
