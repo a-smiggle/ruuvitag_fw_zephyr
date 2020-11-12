@@ -23,7 +23,8 @@ static bool has_adc = false;
 
 static bool device_mac_rx = false;
 mac_address_bin_t device_mac;
-static int16_t temperature = 0, x = 0, y= 0, z = 0, vbatt = 0;
+static int32_t temperature = 0;
+static int16_t x = 0, y= 0, z = 0, vbatt = 0;
 static uint16_t humidity = 0, pressure = 0, acceleration_events = 0;
 static int64_t battery_check = 0, time = 0;
 static uint32_t packet_counter = 0;
@@ -56,49 +57,98 @@ static int get_tx_power()
 }
 
 /*
- * Adjested from: 
+ * Adjusted from: 
  * https://github.com/ruuvi/ruuvitag_fw/blob/master/libraries/ruuvi_sensor_formats/ruuvi_endpoints.c
+ * Data found here is not as accurate as found in on current ruuvi fw.
  */
-static void ruuvi_raw_v2_encode(uint8_t *data){
-    data[0]     =   0x99;
-    data[1]     =   0x04;
-    data[2]     =   PACKET_MODE;
-    data[3] 	= 	((temperature)>>8);
-	data[4] 	= 	((temperature) & 0xFF);
-	data[5] 	= 	((humidity)>>8);
-	data[6] 	= 	((humidity) & 0xFF);
-	data[7] 	= 	((pressure)>>8);
-	data[8] 	= 	((pressure) & 0xFF);
-	data[9] 	= 	((x)>>8);
-	data[10] 	= 	((x) & 0xFF);
-	data[11] 	= 	((y)>>8);
-	data[12] 	= 	((y) & 0xFF);
-	data[13] 	= 	((z)>>8);
-	data[14] 	= 	((z) & 0xFF);
-	vbatt 		-= 	1600; //Bias by 1600 mV
-    vbatt 		<<= 5;   //Shift by 5 to fit TX PWR in
-    data[15] 	= 	(vbatt)>>8;
-    data[16] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
+static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
+	data[0 + offset]    =   RUUVI_RAWv2;
+	int32_t t 			= 	temperature / 0.5;
+    data[1 + offset] 	= 	((t) >> 8);
+	data[2 + offset] 	= 	((t) & 0xFF);
+	uint32_t h 			= 	humidity * 4;
+	data[3 + offset] 	= 	((h)>>8);
+	data[4 + offset] 	= 	((h) & 0xFF);
+	data[5 + offset] 	= 	((pressure)>>8);
+	data[6 + offset] 	= 	((pressure) & 0xFF);
+	/* Need to Fix once raw mg data can be acquired */
+	data[7 + offset] 	= 	0;
+	data[8 + offset] 	= 	0;
+	data[9 + offset] 	= 	0;
+	data[10 + offset] 	= 	0;
+	data[11 + offset] 	= 	0;
+	data[12 + offset] 	= 	0;
+	vbatt 				-= 	1600; //Bias by 1600 mV
+    vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
+    data[13 + offset] 	= 	(vbatt)>>8;
+    data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
     if (!tx_pwr_rx){
         get_tx_power();
     }
     /* Prepare TX power for packet */
-	tx_pwr += 40;
-    tx_pwr /= 2;
-    data[16] 	|= 	((uint8_t)tx_pwr)&0x1F; //5 lowest bits for TX pwr
-	data[17] 	= 	acceleration_events % 256;
-	data[18] 	= 	(packet_counter>>8);
-	data[19] 	= 	(packet_counter&0xFF);
+	tx_pwr 				+= 40;
+    tx_pwr 				/= 2;
+    data[14 + offset] 	|= 	((uint8_t)tx_pwr)&0x1F; //5 lowest bits for TX pwr
+	data[15 + offset] 	= 	acceleration_events % 256;
+	data[16 + offset] 	= 	(packet_counter>>8);
+	data[17 + offset] 	= 	(packet_counter&0xFF);
     if(!device_mac_rx){
         get_mac(&device_mac);
         device_mac_rx = true;
     }
-    data[20] = device_mac.mac[5]; 
-	data[21] = device_mac.mac[4];
-	data[22] = device_mac.mac[3];
-	data[22] = device_mac.mac[2];
-	data[23] = device_mac.mac[1]; 
-	data[24] = device_mac.mac[0];
+    data[18 + offset] 	= device_mac.mac[5]; 
+	data[19 + offset] 	= device_mac.mac[4];
+	data[20 + offset] 	= device_mac.mac[3];
+	data[21 + offset] 	= device_mac.mac[2];
+	data[22 + offset] 	= device_mac.mac[1]; 
+	data[23 + offset] 	= device_mac.mac[0];
+    ++packet_counter;
+}
+
+/*
+ * Adjusted from: 
+ * https://github.com/ruuvi/ruuvitag_fw/blob/master/libraries/ruuvi_sensor_formats/ruuvi_endpoints.c
+ */
+static void ruuvi_zephyr_encode(uint8_t *data, uint8_t offset){
+	data[0 + offset]     =   RUUVI_ZEPHYR_PACKET;
+	int32_t t 	= 	temperature / 0.5;
+    data[1 + offset] 	= 	((t) >> 8);
+	data[2 + offset] 	= 	((t) & 0xFF);
+	uint32_t h 	= 	humidity * 4;
+	data[3 + offset] 	= 	((h)>>8);
+	data[4 + offset] 	= 	((h) & 0xFF);
+	data[5 + offset] 	= 	((pressure)>>8);
+	data[6 + offset] 	= 	((pressure) & 0xFF);
+	data[7 + offset] 	= 	((x)>>8);
+	data[8 + offset] 	= 	((x) & 0xFF);
+	data[9 + offset] 	= 	((y)>>8);
+	data[10 + offset] 	= 	((y) & 0xFF);
+	data[11 + offset] 	= 	((z)>>8);
+	data[12 + offset] 	= 	((z) & 0xFF);
+	vbatt 				-= 	1600; //Bias by 1600 mV
+    vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
+    data[13 + offset] 	= 	(vbatt)>>8;
+    data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
+    if (!tx_pwr_rx){
+        get_tx_power();
+    }
+    /* Prepare TX power for packet */
+	tx_pwr 		+= 40;
+    tx_pwr 		/= 2;
+    data[14 + offset] 	|= 	((uint8_t)tx_pwr)&0x1F; //5 lowest bits for TX pwr
+	data[15 + offset] 	= 	acceleration_events % 256;
+	data[16 + offset] 	= 	(packet_counter>>8);
+	data[17 + offset] 	= 	(packet_counter&0xFF);
+    if(!device_mac_rx){
+        get_mac(&device_mac);
+        device_mac_rx = true;
+    }
+    data[18 + offset] = device_mac.mac[5]; 
+	data[19 + offset] = device_mac.mac[4];
+	data[20 + offset] = device_mac.mac[3];
+	data[21 + offset] = device_mac.mac[2];
+	data[22 + offset] = device_mac.mac[1]; 
+	data[23 + offset] = device_mac.mac[0];
     ++packet_counter;
 }
 
@@ -151,6 +201,17 @@ void ruuvi_endpoint_sensor_check(void){
     return;
 }
 
+void ruuvi_update_nfc_endpoint(uint8_t* data)
+{
+	if(CONFIG_RUUVITAG_RAWV2){
+		ruuvi_raw_v2_encode(data, 0);
+	}
+	else{
+		ruuvi_zephyr_encode(data, 0);
+	}
+    
+}
+
 void ruuvi_update_endpoint(uint8_t* data)
 {
     if (has_adc){
@@ -162,5 +223,15 @@ void ruuvi_update_endpoint(uint8_t* data)
     if (has_lis2dh12){
         ruuvi_update_lis2dh();
     }
-    ruuvi_raw_v2_encode(data);
+	/*
+	 * Allows for Ruuvi RAWv2 to be used as the data packet.
+	 * This will become the default once correct data can be acquired.
+	 */
+	if(CONFIG_RUUVITAG_RAWV2){
+		ruuvi_raw_v2_encode(data, RUUVI_MFG_OFFSET);
+	}
+	else{
+		ruuvi_zephyr_encode(data, RUUVI_MFG_OFFSET);
+	}
+    
 }

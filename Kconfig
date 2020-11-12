@@ -17,7 +17,20 @@ endmenu # Firmware versioning
 config RUUVITAG_DFU_TIMEOUT
 	int "The amount of minutes the device will remain connectable to perform a DFU."
 	default 2
-endmenu
+
+config RUUVITAG_NFC_SENSOR_DATA
+	bool "Enables if Sensor data will be added into NFC payload."
+	default false
+
+config RUUVITAG_NFC_SENSOR_DATA_FREQUENCY
+	int "Controls how often the NFC Sensor data will be refreshed."
+	default 1
+
+config RUUVITAG_RAWV2
+	int "Controls the data packet to be used."
+	default 1
+
+endmenu #Ruuvitag
 
 menu "Zephyr Kernel"
 source "Kconfig.zephyr"

@@ -71,7 +71,6 @@ static void dfu_init(void){
 }
 
 static int64_t lastPressed = 0;
-static bool BT_STATE = false;
 static int64_t btn_time = 0;
 
 static struct gpio_callback button_cb_data;
@@ -81,34 +80,33 @@ static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 {
 	btn_time = k_uptime_get();
 	
-	if (btn_time - lastPressed > 1000 && !BT_STATE){
+	if (btn_time - lastPressed > 1000){
 		toggle_red(1);
-		BT_STATE = !BT_STATE;
-		bt_mode_switch(BT_STATE);
 	}
 	lastPressed = btn_time;
 }
 
-
 void main(void)
 {	
+	LOG_INF("Ruuvitag Started");
+	LOG_INF("Version: %s", log_strdup(CONFIG_RUUVITAG_APP_VERSION));
 	led_init();
 
 	button_init();
+	
 	/*
 	 * If button B is pressed, the device will be connectable
 	 * and ready for a DFU. This state will be reverted after a specific
 	 * amount of time, controllable by using CONFIG_RUUVITAG_DFU_TIMEOUT.
 	 * Default is 2 minutes.
 	 */
-	BT_STATE = button_pressed_state();
-	if(BT_STATE){
+	if(button_pressed_state()){
 		LOG_INF("Button Pressed at boot.\n");
 	}
 	button_int_setup(&button_cb_data, button_pressed);
-	
+
 	/*
-	 * Initialised the sensors and makes them ready to fill the
+	 * Initialises the sensors and makes them ready to fill the
 	 * BLE TX buffer.
 	 */
 	ruuvi_endpoint_sensor_check();
@@ -120,27 +118,16 @@ void main(void)
 	dfu_init();
 
 	/* Initialize the Bluetooth Subsystem.*/
-	bt_init(BT_STATE);
+	bt_init();
 
 	/* NFC must be done after BT so that MAC can be received. */
 	ruuvi_nfc_init();
-
 	while (true) {
-		if(!BT_STATE){
-			toggle_green(1);
-			bt_update_packet();
-			/* Turn LEDs off */
-			toggle_green(0);
-			
-			k_sleep(K_MSEC(980));
-		}
-		else{
-			if(k_uptime_get() - lastPressed > RUUVI_DFU_TIMEOUT){
-				BT_STATE = false;
-				bt_mode_switch(BT_STATE);
-			}
-			flash_red();
-			k_sleep(K_SECONDS(1));
-		}
+		toggle_green(1);
+		bt_update_packet();
+		/* Turn LEDs off */
+		toggle_green(0);
+		
+		k_sleep(K_MSEC(980));
 	}
 }

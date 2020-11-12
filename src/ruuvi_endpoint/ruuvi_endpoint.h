@@ -7,6 +7,7 @@
 #define RUUVI_ENDPOINT_H_
 
 void ruuvi_endpoint_sensor_check(void);
+void ruuvi_update_nfc_endpoint(uint8_t* data);
 void ruuvi_update_endpoint(uint8_t* data);
 
 #endif /* RUUVI_ENDPOINT_H_ */
