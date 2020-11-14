@@ -27,7 +27,7 @@ void get_id(char *serial_number)
 	/* Expand binary device ID to hex string */
 	len = bin2hex(device_id, sizeof(device_id), serial_number,
 		      RUUVI_DSN_LENGTH_CHAR + 1);
-	__ASSERT_NO_MSG(len == GADGETSRUUVI_DSN_LENGTH_CHAR_DSN_LENGTH_CHARS);
+	__ASSERT_NO_MSG(len == RUUVI_DSN_LENGTH_CHAR);
 
 	LOG_INF("Serial: %s", log_strdup(serial_number));
 }

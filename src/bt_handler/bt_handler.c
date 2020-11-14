@@ -41,7 +41,7 @@ static struct k_work ble_work;
 				      BT_GAP_ADV_SLOW_INT_MIN, \
 				      BT_GAP_ADV_SLOW_INT_MIN, NULL)
 
-static uint8_t mfg_data[RUUVI_MFG_OFFSET + RUUVI_RAWv2_LEN +1];
+static uint8_t mfg_data[RUUVI_MFG_OFFSET + RUUVI_RAWv2_LEN];
 
 /* Set Scan Response data */
 static const struct bt_data sd[] = {
@@ -57,13 +57,6 @@ static const struct bt_data bc[] = {
 	BT_DATA(BT_DATA_MANUFACTURER_DATA, mfg_data, sizeof(mfg_data)),
 };
 
-static struct bt_conn_cb m_conn_callbacks = {
-	.connected = connected,
-	.disconnected = disconnected,
-	.le_param_req = le_param_req,
-	.le_param_updated = le_param_updated
-};
-
 static void connected(struct bt_conn *conn, uint8_t err)
 {
 	if (err) {
@@ -76,6 +69,23 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
 {
 	LOG_INF("disconnected (reason: %u)", reason);
 }
+
+static bool le_param_req(struct bt_conn *conn, struct bt_le_conn_param *param)
+{
+	return true;
+}
+
+static void le_param_updated(struct bt_conn *conn, uint16_t interval, uint16_t latency, uint16_t timeout)
+{
+
+}
+
+static struct bt_conn_cb m_conn_callbacks = {
+	.connected = connected,
+	.disconnected = disconnected,
+	.le_param_req = le_param_req,
+	.le_param_updated = le_param_updated
+};
 
 static void advertise(struct k_work *work)
 {
@@ -97,20 +107,11 @@ static void advertise(struct k_work *work)
 	LOG_INF("Ruuvitag is now beaconing.");
 }
 
-static bool le_param_req(struct bt_conn *conn, struct bt_le_conn_param *param)
-{
-	return true;
-}
-
-static void le_param_updated(struct bt_conn *conn, uint16_t interval, uint16_t latency, uint16_t timeout)
-{
-
-}
-
 void bt_update_packet(void){
     ruuvi_update_endpoint(mfg_data);
 		/* Update advertisement data */
 	bt_le_adv_update_data(bc, ARRAY_SIZE(bc), sd, ARRAY_SIZE(sd));
+	LOG_DBG("Updating BLE packet");
 }
 
 void bt_init(void)
@@ -134,7 +135,7 @@ void bt_init(void)
 	
 #endif
 
-	LOG_DBG("Bluetooth initialized");
+	LOG_INF("Bluetooth initialized");
 }
 
 void bt_adv_stop(void)

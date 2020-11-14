@@ -20,25 +20,44 @@
 #define RUUVI_MFG_OFFSET 2
 #define RUUVI_RAWv2 0x05
 #define RUUVI_ZEPHYR_PACKET 0x09
-#define RUUVI_RAWv2_LEN 23
+#define RUUVI_RAWv2_LEN 24
 #define RUUVI_DSN_LENGTH_BYTES 8
 #define RUUVI_DSN_LENGTH_CHAR RUUVI_DSN_LENGTH_BYTES*2
+#define RUUVI_BLE_PASSKEY 9904
 
-#define RUUVI_TX_POWER 0x04
+#ifdef CONFIG_BT_CTLR_TX_PWR_PLUS_4
+#define RUUVI_TX_POWER 4
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_0
+#define RUUVI_TX_POWER 0
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_MINUS_4
+#define RUUVI_TX_POWER -4
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_MINUS_8
+#define RUUVI_TX_POWER -8
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_MINUS_12
+#define RUUVI_TX_POWER -12
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_MINUS_16
+#define RUUVI_TX_POWER -16
+#endif
+#ifdef CONFIG_BT_CTLR_TX_PWR_MINUS_20
+#define RUUVI_TX_POWER -20
+#endif
 
 /*
  * NFC Variables
  */
-#define MAX_REC_COUNT		    6
-#define NFC_ZEPHYR_VERSION_LEN  15
-#define NFC_NCS_VERSION_LEN     11
-#define NFC_FW_VERSION_LEN		10
-#define NFC_AD_LEN 		        24
-#define NFC_SERIAL_LEN 		    29
-#define NFC_TEMP_LEN            12
-#define NFC_HUM_LEN             19
-#define NFC_BAT_LEN             18
-#define NDEF_MSG_BUF_SIZE	    160
+#define RUUVI_MAX_REC_COUNT		        7
+#define RUUVI_NFC_ZEPHYR_VERSION_LEN    15
+#define RUUVI_NFC_NCS_VERSION_LEN       11
+#define RUUVI_NFC_FW_VERSION_LEN		10
+#define RUUVI_NFC_AD_LEN 		        24
+#define RUUVI_NFC_SERIAL_LEN 		    29
+#define RUUVI_NFC_DATA_LEN              150
+#define RUUVI_NDEF_MSG_BUF_SIZE	        300
 
 typedef struct mac_address_bin
 {

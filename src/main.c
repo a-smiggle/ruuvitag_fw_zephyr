@@ -70,6 +70,9 @@ static void dfu_init(void){
 #endif
 }
 
+#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
+static int64_t last_nfc_update = 0;
+#endif
 static int64_t lastPressed = 0;
 static int64_t btn_time = 0;
 
@@ -90,15 +93,14 @@ void main(void)
 {	
 	LOG_INF("Ruuvitag Started");
 	LOG_INF("Version: %s", log_strdup(CONFIG_RUUVITAG_APP_VERSION));
+	
 	led_init();
 
 	button_init();
 	
 	/*
-	 * If button B is pressed, the device will be connectable
-	 * and ready for a DFU. This state will be reverted after a specific
-	 * amount of time, controllable by using CONFIG_RUUVITAG_DFU_TIMEOUT.
-	 * Default is 2 minutes.
+	 * This could be used in the future to perform any numbers 
+	 * of tasks.
 	 */
 	if(button_pressed_state()){
 		LOG_INF("Button Pressed at boot.\n");
@@ -112,8 +114,8 @@ void main(void)
 	ruuvi_endpoint_sensor_check();
 
 	/*
-	 * This is required to allow the application to easily toggle
-	 * between BT modes.
+	 * Enables the filsesystem and mgmt groups that are required to
+	 * enable dfu functionality.
 	 */
 	dfu_init();
 
@@ -122,12 +124,21 @@ void main(void)
 
 	/* NFC must be done after BT so that MAC can be received. */
 	ruuvi_nfc_init();
+#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
+	last_nfc_update = k_uptime_get();
+#endif
 	while (true) {
 		toggle_green(1);
 		bt_update_packet();
 		/* Turn LEDs off */
 		toggle_green(0);
-		
+#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
+		if(k_uptime_get() - last_nfc_update > RUUVI_NFC_REFRESH){
+			ruuvi_nfc_update();
+			last_nfc_update = k_uptime_get();
+		}
+#endif
+
 		k_sleep(K_MSEC(980));
 	}
 }

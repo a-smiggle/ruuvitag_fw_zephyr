@@ -6,8 +6,7 @@
 #ifndef NFC_HANDLER_H_
 #define NFC_HANDLER_H_
 
-//void ruuvi_nfc_update_sensor_data(void);
-
-int ruuvi_nfc_init(void);
+void ruuvi_nfc_update(void);
+void ruuvi_nfc_init(void);
 
 #endif /* NFC_HANDLER_H_ */

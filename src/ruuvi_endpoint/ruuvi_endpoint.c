@@ -28,33 +28,7 @@ static int16_t x = 0, y= 0, z = 0, vbatt = 0;
 static uint16_t humidity = 0, pressure = 0, acceleration_events = 0;
 static int64_t battery_check = 0, time = 0;
 static uint32_t packet_counter = 0;
-static bool tx_pwr_rx = false;
-static int8_t tx_pwr = 0;
-
-static int get_tx_power()
-{
-	if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_PLUS_4)){
-		return 4;
-	}
-	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_4)){
-		return -4;
-	}
-	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_8)){
-		return -8;
-	}
-	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_12)){
-		return -12;
-	}
-	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_16)){
-		return -16;
-	}
-	else if(IS_ENABLED(CONFIG_BT_CTLR_TX_PWR_MINUS_20)){
-		return -20;
-	}
-    else{
-		return 0;
-	}
-}
+static int8_t tx_pwr = RUUVI_TX_POWER;
 
 /*
  * Adjusted from: 
@@ -82,13 +56,11 @@ static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
     vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
     data[13 + offset] 	= 	(vbatt)>>8;
     data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
-    if (!tx_pwr_rx){
-        get_tx_power();
-    }
+	int8_t tx = tx_pwr;
     /* Prepare TX power for packet */
-	tx_pwr 				+= 40;
-    tx_pwr 				/= 2;
-    data[14 + offset] 	|= 	((uint8_t)tx_pwr)&0x1F; //5 lowest bits for TX pwr
+	tx 				+= 40;
+    tx 				/= 2;
+    data[14 + offset] 	|= 	((uint8_t)tx)&0x1F; //5 lowest bits for TX pwr
 	data[15 + offset] 	= 	acceleration_events % 256;
 	data[16 + offset] 	= 	(packet_counter>>8);
 	data[17 + offset] 	= 	(packet_counter&0xFF);
@@ -129,13 +101,11 @@ static void ruuvi_zephyr_encode(uint8_t *data, uint8_t offset){
     vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
     data[13 + offset] 	= 	(vbatt)>>8;
     data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
-    if (!tx_pwr_rx){
-        get_tx_power();
-    }
     /* Prepare TX power for packet */
-	tx_pwr 		+= 40;
-    tx_pwr 		/= 2;
-    data[14 + offset] 	|= 	((uint8_t)tx_pwr)&0x1F; //5 lowest bits for TX pwr
+	int8_t tx = tx_pwr;
+	tx 		+= 40;
+    tx 		/= 2;
+    data[14 + offset] 	|= 	((uint8_t)tx)&0x1F; //5 lowest bits for TX pwr
 	data[15 + offset] 	= 	acceleration_events % 256;
 	data[16 + offset] 	= 	(packet_counter>>8);
 	data[17 + offset] 	= 	(packet_counter&0xFF);
