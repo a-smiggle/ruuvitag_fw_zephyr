@@ -30,22 +30,12 @@ jobs:
           mkdir -p ${GITHUB_WORKSPACE}/gnuarmemb/
           tar xvfj ${GITHUB_WORKSPACE}/gcc-arm/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2 -C ${GITHUB_WORKSPACE}/gnuarmemb/
 
-      - name: Cache Device Tree Compile binary
-        uses: actions/cache@v2.1.4
-        id: cache-dtc
-        with:
-          path: device-tree-compiler/
-          key: ${{ runner.OS }}-device-tree-compiler_1.4.7-3ubuntu2_amd64.deb 
-
-      - name: Download Device Tree Compile 1.4.7
-        if: steps.cache-dtc.outputs.cache-hit != 'true'
+      - name: Install Zephyr dependencies
         run: |
-          mkdir -p ${GITHUB_WORKSPACE}/device-tree-compiler/
-          wget -q 'http://mirrors.edge.kernel.org/ubuntu/pool/main/d/device-tree-compiler/device-tree-compiler_1.4.7-3ubuntu2_amd64.deb' -O ${GITHUB_WORKSPACE}/device-tree-compiler/device-tree-compiler_1.4.7-3ubuntu2_amd64.deb
-
-      - name: Install Device Tree Compile 1.4.7
-        run: |
-          sudo dpkg -i ${GITHUB_WORKSPACE}/device-tree-compiler/device-tree-compiler_1.4.7-3ubuntu2_amd64.deb
+          sudo apt install --no-install-recommends git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget \
+          python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev
+          sudo env "PATH=$PATH" pip3 install cmake wheel
+          sudo env "PATH=$PATH" pip3 install -U --pre west
 
       # Workaround for https://github.com/NordicSemiconductor/pc-nrfutil/issues/288
       - name: Install latest PIP
@@ -54,12 +44,6 @@ jobs:
           # Newer PIP will not overwrite distutils, so upgrade PyYAML manually
           sudo apt-get install python3-setuptools
           sudo python3 -m pip install --ignore-installed -U PyYAML
-
-      - name: Install Zephyr dependencies
-        run: |
-          sudo apt-get -y install ninja-build gperf python3-pip python3-setuptools
-          sudo env "PATH=$PATH" pip3 install cmake wheel
-          sudo env "PATH=$PATH" pip3 install -U --pre west
 
       - name: Install Rust+Cargo
         run: |
@@ -70,7 +54,7 @@ jobs:
           export PATH=~/.local/bin:/usr/share/rust/.cargo/bin:$PATH
           cd ${GITHUB_WORKSPACE}
           mkdir ncs && cd ncs
-          west init -m https://github.com/nrfconnect/sdk-nrf --mr v1.4.0
+          west init -m https://github.com/nrfconnect/sdk-nrf --mr v1.5.0
           west update
           west zephyr-export
           sudo env "PATH=$PATH" pip3 install pc_ble_driver_py

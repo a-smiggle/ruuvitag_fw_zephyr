@@ -78,7 +78,7 @@ static void nfc_callback(void *context,
  */
 static void ruuvi_nfc_fill_static_data(void){
 	strcpy(os_payload, "Zephyr: ");
-	strcat(os_payload, "2.4.0");
+	strcat(os_payload, "2.4.99");
 	strcpy(ncs_payload, "NCS: ");
 	strcat(ncs_payload, NCS_VERSION_STRING);
     strcpy(fw_payload, "FW: ");
