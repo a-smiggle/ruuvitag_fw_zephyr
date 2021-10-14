@@ -9,7 +9,7 @@
 #include <drivers/sensor.h>
 #include <drivers/gpio.h>
 #include <power/reboot.h>
-#include <power/power.h>
+#include <pm/pm.h>
 #include <stdio.h>
 #include <sys/util.h>
 #ifdef CONFIG_BOOTLOADER_MCUBOOT
