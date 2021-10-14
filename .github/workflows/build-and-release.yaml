@@ -23,18 +23,9 @@ jobs:
 
       - name: Install Zephyr dependencies
         run: |
-          sudo apt install --no-install-recommends git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget \
-          python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev
-          sudo env "PATH=$PATH" pip3 install cmake wheel
-          sudo env "PATH=$PATH" pip3 install -U --pre west
-
-      # Workaround for https://github.com/NordicSemiconductor/pc-nrfutil/issues/288
-      - name: Install latest PIP
-        run: |
-          sudo python3 -m pip install -U pip
-          # Newer PIP will not overwrite distutils, so upgrade PyYAML manually
-          sudo apt-get install python3-setuptools
-          sudo python3 -m pip install --ignore-installed -U PyYAML
+          sudo apt-get -y update && sudo apt-get -y upgrade && \
+          sudo apt-get -y install device-tree-compiler wget python3-pip ninja-build gperf git unzip python3-setuptools libncurses5 libncurses5-dev libyaml-dev libfdt1 && \
+          sudo apt-get -y remove python-cryptography python3-cryptography && sudo apt-get -y clean && sudo apt-get -y autoremove
       
       - name: Install Rust+Cargo
         run: |
@@ -66,24 +57,32 @@ jobs:
           path: ncs/
           key: ${{ runner.OS }}-ncs
       
-      - name: Download NCS v1.5.0
+      - name: Python Packages
+        run: |
+          python3 -m pip install -U pip && \
+          python3 -m pip install -U setuptools && \
+          python3 -m pip install cmake>=3.20.0 wheel && \
+          python3 -m pip install -U west==0.11.0 && \
+          python3 -m pip install pc_ble_driver_py && \
+          # Newer PIP will not overwrite distutils, so upgrade PyYAML manually
+          python3 -m pip install --ignore-installed -U PyYAML
+
+      - name: Download NCS v1.7.0
         if: steps.cache-ncs.outputs.cache-hit != 'true'
         run: |
           mkdir -p ${GITHUB_WORKSPACE}/ncs && cd ${GITHUB_WORKSPACE}/ncs
-          west init -m https://github.com/nrfconnect/sdk-nrf --mr v1.5.0
+          west init -m https://github.com/nrfconnect/sdk-nrf --mr v1.7.0
           west update
 
       - name: Setup NCS
         run: |
           cd ${GITHUB_WORKSPACE}/ncs
           west zephyr-export
-          sudo env "PATH=$PATH" pip3 install pc_ble_driver_py
-          sudo env "PATH=$PATH" pip3 install -r zephyr/scripts/requirements.txt
-          sudo env "PATH=$PATH" pip3 install -r nrf/scripts/requirements.txt
-          sudo apt-get -y remove python-cryptography python3-cryptography
-          sudo env "PATH=$PATH" pip3 install -r bootloader/mcuboot/scripts/requirements.txt
+          python3 -m pip install -r zephyr/scripts/requirements.txt && \
+          python3 -m pip install -r nrf/scripts/requirements.txt && \
+          python3 -m pip install -r bootloader/mcuboot/scripts/requirements.txt && \
+          echo "source /workdir/ncs/zephyr/zephyr-env.sh" >> ~/.bashrc &&
           cd nrf && cd applications
-          rm -d -r ruuvitag_fw_zephyr
           git clone --recursive https://github.com/${GITHUB_REPOSITORY} ruuvitag_fw_zephyr
           cd ruuvitag_fw_zephyr
           git reset --hard ${GITHUB_SHA}

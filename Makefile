@@ -35,3 +35,6 @@ connect:
 
 debug:
 	JLinkRTTClient
+
+erase:
+	nrfjprog --family nRF52 --eraseall

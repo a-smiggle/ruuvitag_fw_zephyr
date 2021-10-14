@@ -9,7 +9,6 @@
 #include <devicetree.h>
 #include <drivers/sensor.h>
 #include "bme280_handler.h"
-#include <power/power.h>
 
 #include <logging/log.h>
 LOG_MODULE_REGISTER(bme280, CONFIG_RUUVITAG_LOG_LEVEL);
@@ -24,17 +23,6 @@ LOG_MODULE_REGISTER(bme280, CONFIG_RUUVITAG_LOG_LEVEL);
 #endif
 
 const struct device *bme280;
-
-int bme280_power_state(bool state){
-	int rc;
-	if(!state){
-		rc = device_set_power_state(bme280, DEVICE_PM_LOW_POWER_STATE, NULL, NULL);
-	}
-	else{
-		rc = device_set_power_state(bme280, DEVICE_PM_ACTIVE_STATE, NULL, NULL);
-	}
-	return rc;
-}
 
 void bme280_fetch(void)
 {
@@ -65,7 +53,7 @@ uint16_t bme280_get_humidity(void){
 }
 
 bool init_bme280(void){
-	bme280 = device_get_binding(BME280_LABEL);
+	bme280 = DEVICE_DT_GET_ANY(bosch_bme280);
 	if (bme280 == NULL) {
 		return false;
 	} else {

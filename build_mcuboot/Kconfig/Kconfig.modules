@@ -1,0 +1,96 @@
+menu "nrf (/home/anthony/dev/Zephyr/ncs_1_7_0/nrf)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/nrf/Kconfig.nrf"
+config ZEPHYR_NRF_MODULE
+	bool
+	default y
+endmenu
+menu "mcuboot (/home/anthony/dev/Zephyr/ncs_1_7_0/bootloader/mcuboot)"
+osource "$(ZEPHYR_MCUBOOT_KCONFIG)"
+config ZEPHYR_MCUBOOT_MODULE
+	bool
+	default y
+endmenu
+menu "trusted-firmware-m (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/tee/tfm)"
+osource "$(ZEPHYR_TRUSTED_FIRMWARE_M_KCONFIG)"
+config ZEPHYR_TRUSTED_FIRMWARE_M_MODULE
+	bool
+	default y
+endmenu
+menu "cjson (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/cjson)"
+osource "$(ZEPHYR_CJSON_KCONFIG)"
+config ZEPHYR_CJSON_MODULE
+	bool
+	default y
+endmenu
+menu "pelion-dm (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/pelion-dm)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/pelion-dm/zephyr/Kconfig"
+config ZEPHYR_PELION_DM_MODULE
+	bool
+	default y
+endmenu
+menu "cddl-gen (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/cddl-gen)"
+osource "$(ZEPHYR_CDDL_GEN_KCONFIG)"
+config ZEPHYR_CDDL_GEN_MODULE
+	bool
+	default y
+endmenu
+menu "memfault-firmware-sdk (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/memfault-firmware-sdk)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/memfault-firmware-sdk/ports/zephyr/Kconfig"
+config ZEPHYR_MEMFAULT_FIRMWARE_SDK_MODULE
+	bool
+	default y
+endmenu
+menu "CANopenNode (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/canopennode)"
+osource "$(ZEPHYR_CANOPENNODE_KCONFIG)"
+config ZEPHYR_CANOPENNODE_MODULE
+	bool
+	default y
+endmenu
+menu "hal_nordic (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/hal/nordic)"
+osource "$(ZEPHYR_HAL_NORDIC_KCONFIG)"
+config ZEPHYR_HAL_NORDIC_MODULE
+	bool
+	default y
+endmenu
+menu "loramac-node (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/loramac-node)"
+osource "$(ZEPHYR_LORAMAC_NODE_KCONFIG)"
+config ZEPHYR_LORAMAC_NODE_MODULE
+	bool
+	default y
+endmenu
+menu "lz4 (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/lz4)"
+osource "$(ZEPHYR_LZ4_KCONFIG)"
+config ZEPHYR_LZ4_MODULE
+	bool
+	default y
+endmenu
+menu "mbedtls (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/crypto/mbedtls)"
+osource "$(ZEPHYR_MBEDTLS_KCONFIG)"
+config ZEPHYR_MBEDTLS_MODULE
+	bool
+	default y
+endmenu
+menu "nanopb (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/nanopb)"
+osource "$(ZEPHYR_NANOPB_KCONFIG)"
+config ZEPHYR_NANOPB_MODULE
+	bool
+	default y
+endmenu
+menu "TraceRecorder (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/debug/TraceRecorder)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/modules/debug/TraceRecorder/kernelports/Zephyr/Kconfig"
+config ZEPHYR_TRACERECORDER_MODULE
+	bool
+	default y
+endmenu
+menu "nrfxlib (/home/anthony/dev/Zephyr/ncs_1_7_0/nrfxlib)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/nrfxlib/Kconfig.nrfxlib"
+config ZEPHYR_NRFXLIB_MODULE
+	bool
+	default y
+endmenu
+menu "connectedhomeip (/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/matter)"
+osource "/home/anthony/dev/Zephyr/ncs_1_7_0/modules/lib/matter/config/nrfconnect/chip-module/Kconfig"
+config ZEPHYR_CONNECTEDHOMEIP_MODULE
+	bool
+	default y
+endmenu

@@ -8,7 +8,6 @@
 #include <string.h>
 #include <drivers/adc.h>
 #include <hal/nrf_saadc.h>
-#include <power/power.h>
 
 #include "battery_handler.h"
 
@@ -47,17 +46,6 @@ static const struct adc_channel_cfg m_2nd_channel_cfg = {
 	.input_positive   = ADC_2ND_CHANNEL_INPUT,
 #endif
 };
-
-int adc_power_state(bool state){
-	int rc;
-	if(!state){
-		rc = device_set_power_state(adc_dev, DEVICE_PM_LOW_POWER_STATE, NULL, NULL);
-	}
-	else{
-		rc = device_set_power_state(adc_dev, DEVICE_PM_ACTIVE_STATE, NULL, NULL);
-	}
-	return rc;
-}
 
 int16_t get_battery_level(void)
 {	
