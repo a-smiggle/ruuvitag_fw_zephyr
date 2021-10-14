@@ -2,6 +2,9 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 
+# Add external Drivers
+list(APPEND ZEPHYR_EXTRA_MODULES ${CMAKE_CURRENT_SOURCE_DIR}/drivers/lis2dh12)
+
 # Add the board
 set(BOARD_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
