@@ -26,10 +26,6 @@ config RUUVITAG_NFC_SENSOR_DATA_FREQUENCY
 	int "Controls how often the NFC Sensor data will be refreshed."
 	default 1
 
-config RUUVITAG_RAWV2
-	int "Controls the data packet to be used."
-	default 1
-
 endmenu #Ruuvitag
 
 menu "Zephyr Kernel"

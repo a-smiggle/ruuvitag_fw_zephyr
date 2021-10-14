@@ -1,0 +1,131 @@
+# LIS2DH12 Three Axis Accelerometer configuration options
+
+menuconfig LIS2DH12
+	bool "LIS2DH12 Three Axis Accelerometer"
+	depends on SPI
+	select HAS_STMEMSC
+	select USE_STDC_LIS2DH12
+	help
+	  Enable SPI-based driver for LIS2DH12 triaxial accelerometer sensors.
+
+if LIS2DH12
+
+config LIS2DH12_INIT_PRIORITY
+	int "Sensor Init Priority"
+	range 0 100
+	default 90
+
+config LIS2DH12_LOG_LEVEL
+	int "Log Level"
+	range 0 6
+	default 3
+
+choice
+	prompt "Acceleration measurement range"
+	default LIS2DH12_ACCEL_RANGE_2G
+	help
+	  Initial measurement full scale range for acceleration values.
+
+config LIS2DH12_ACCEL_RANGE_2G
+	bool "+/-2g"
+
+config LIS2DH12_ACCEL_RANGE_4G
+	bool "+/-4g"
+
+config LIS2DH12_ACCEL_RANGE_8G
+	bool "+/-8g"
+
+config LIS2DH12_ACCEL_RANGE_16G
+	bool "+/-16g"
+
+endchoice
+
+choice
+	prompt "Operation mode"
+	default LIS2DH12_OPER_MODE_NORMAL
+	help
+	  Choose between high resolution, normal or low power operation
+	  mode for chip at init.
+
+config LIS2DH12_OPER_MODE_HIGH_RES
+	bool "high resolution (12 bit)"
+
+config LIS2DH12_OPER_MODE_NORMAL
+	bool "normal (10 bit)"
+
+config LIS2DH12_OPER_MODE_LOW_POWER
+	bool "low power (8 bit)"
+
+endchoice
+
+choice
+	prompt "Output data rate frequency"
+	default LIS2DH12_ODR_1
+	help
+	  Initial data rate frequency of acceleration data at initialization.
+	  Supported values:
+	  1Hz, 10Hz, 25Hz, 50Hz, 100Hz, 200Hz, 400Hz in all power modes
+	  1620Hz, 5376Hz in low power mode only
+	  1344Hz in normal power mode
+
+config LIS2DH12_ODR_1
+	bool "1Hz"
+
+config LIS2DH12_ODR_10
+	bool "10Hz"
+
+config LIS2DH12_ODR_25
+	bool "25Hz"
+
+config LIS2DH12_ODR_50
+	bool "50Hz"
+
+config LIS2DH12_ODR_100
+	bool "100Hz"
+
+config LIS2DH12_ODR_200
+	bool "200Hz"
+
+config LIS2DH12_ODR_400
+	bool "400Hz"
+
+endchoice
+
+config LIS2DH12_FIFO_ENABLED
+	bool "Enable FiFo"
+	default False
+
+if LIS2DH12_FIFO_ENABLED
+
+choice
+	prompt "FiFo Mode"
+	default LIS2DH12_BYPASS_MODE
+	help
+	  Choose FiFo mode.
+
+config LIS2DH12_BYPASS_MODE
+	bool "FiFO Bypassed"
+
+config LIS2DH12_FIFO_MODE
+	bool "Normal FiFo mode."
+
+config LIS2DH12_DYNAMIC_STREAM_MODE
+	bool "Dynamic Stream Mode."
+
+config LIS2DH12_STREAM_TO_FIFO_MODE
+	bool "Stream to FiFo Mode."
+
+endchoice
+
+config LIS2DH_FIFO_WM
+	int "FiFO Watermark Size"
+	range 0 31
+	default 31
+
+endif
+
+config LIS2DH12_TEMP_EN
+	bool "Temperature Enabled"
+	default False
+
+endif # LIS2DH12
