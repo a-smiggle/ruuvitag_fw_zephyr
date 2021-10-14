@@ -2,11 +2,11 @@
 Ruuvitag FW based on Zephyr OS.
 
 # Build Environment
-Ruuvi Node is developed using nRF Connect SDK(NCS) V1.4.0.
+Ruuvi Node is developed using nRF Connect SDK(NCS) V1.7.0.
 
 ## NCS
 Nordic Semiconductor keeps up-to-date instructions on how to setup the SDK for 
-Linux, Mac OSX and Windows. Instructions can be found at https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.4.0/nrf/getting_started.html
+Linux, Mac OSX and Windows. Instructions can be found at https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.7.0/nrf/getting_started.html
 
 # Cloning
 To clone the directory follow the following.
