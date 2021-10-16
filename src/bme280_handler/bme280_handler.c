@@ -22,6 +22,43 @@ LOG_MODULE_REGISTER(bme280, CONFIG_RUUVITAG_LOG_LEVEL);
 #define BME280_LABEL "<none>"
 #endif
 
+// Required to access raw data without needing another driver.
+struct bme280_data {
+	/* Compensation parameters. */
+	uint16_t dig_t1;
+	int16_t dig_t2;
+	int16_t dig_t3;
+	uint16_t dig_p1;
+	int16_t dig_p2;
+	int16_t dig_p3;
+	int16_t dig_p4;
+	int16_t dig_p5;
+	int16_t dig_p6;
+	int16_t dig_p7;
+	int16_t dig_p8;
+	int16_t dig_p9;
+	uint8_t dig_h1;
+	int16_t dig_h2;
+	uint8_t dig_h3;
+	int16_t dig_h4;
+	int16_t dig_h5;
+	int8_t dig_h6;
+
+	/* Compensated values. */
+	int32_t comp_temp;
+	uint32_t comp_press;
+	uint32_t comp_humidity;
+
+	/* Carryover between temperature and pressure/humidity compensation. */
+	int32_t t_fine;
+
+	uint8_t chip_id;
+
+#ifdef CONFIG_PM_DEVICE
+	enum pm_device_state pm_state; /* Current power state */
+#endif
+};
+
 const struct device *bme280;
 
 void bme280_fetch(void)
@@ -30,26 +67,19 @@ void bme280_fetch(void)
 	return;
 }
 
-int16_t bme280_get_temp(void){
-	struct sensor_value temp;
-	sensor_channel_get(bme280, SENSOR_CHAN_AMBIENT_TEMP, &temp);
-	//LOG_INF("temp: %d.%06d, ", temp.val1, temp.val2);
-	return (int16_t)(temp.val1*100 + temp.val2/10000);
+int32_t bme280_get_temp(void){
+	struct bme280_data *data = bme280->data;
+	return data->comp_temp;
 }
 
 uint16_t bme280_get_press(void){
-	struct sensor_value press;
-	sensor_channel_get(bme280, SENSOR_CHAN_PRESS, &press);
-	uint32_t p = (uint32_t)(press.val1*1000 + press.val2/10000);
-	//LOG_INF("press: %d.%06d, ", press.val1, press.val2);
-	return (uint16_t)(p - 50000);
+	struct bme280_data *data = bme280->data;
+	return (uint16_t)(data->comp_press - 50000);
 }
 
-uint16_t bme280_get_humidity(void){
-	struct sensor_value humidity;
-	sensor_channel_get(bme280, SENSOR_CHAN_HUMIDITY, &humidity);
-	//LOG_INF("humidity: %d.%06d\n", humidity.val1, humidity.val2);
-	return (uint16_t)(humidity.val1*100 + humidity.val2/10000);
+uint32_t bme280_get_humidity(void){
+	struct bme280_data *data = bme280->data;
+	return data->comp_humidity;
 }
 
 bool init_bme280(void){

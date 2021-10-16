@@ -25,9 +25,9 @@ static bool device_mac_rx = false;
 mac_address_bin_t device_mac;
 static int32_t temperature = 0;
 static int16_t x = 0, y= 0, z = 0, vbatt = 0;
-static uint16_t humidity = 0, pressure = 0, acceleration_events = 0;
+static uint16_t pressure = 0, acceleration_events = 0;
 static int64_t battery_check = 0, time = 0;
-static uint32_t packet_counter = 0;
+static uint32_t packet_counter = 0, humidity = 0;
 static int8_t tx_pwr = RUUVI_TX_POWER;
 
 /*
@@ -38,10 +38,10 @@ static int8_t tx_pwr = RUUVI_TX_POWER;
  */
 static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
 	data[0 + offset]    =   RUUVI_RAWv2;
-	int32_t t 			= 	temperature / 0.5;
+	int32_t t 			= 	temperature * 2;
     data[1 + offset] 	= 	((t) >> 8);
 	data[2 + offset] 	= 	((t) & 0xFF);
-	uint32_t h 			= 	humidity * 4;
+	uint32_t h 			= 	humidity * 400 / 1024;
 	data[3 + offset] 	= 	((h)>>8);
 	data[4 + offset] 	= 	((h) & 0xFF);
 	data[5 + offset] 	= 	((pressure)>>8);
