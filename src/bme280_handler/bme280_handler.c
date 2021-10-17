@@ -74,7 +74,7 @@ int32_t bme280_get_temp(void){
 
 uint16_t bme280_get_press(void){
 	struct bme280_data *data = bme280->data;
-	return (uint16_t)(data->comp_press - 50000);
+	return (uint16_t)(data->comp_press + 50000);
 }
 
 uint32_t bme280_get_humidity(void){
