@@ -95,7 +95,17 @@
 		label = "LIS2DH12-ACCEL";
 	};
 };
-
+&i2c1 {
+	compatible = "nordic,nrf-twi";
+	status = "okay";
+	sda-pin = <4>; // RuuviTag Revision b8
+	scl-pin = <5>;
+        ti_tmp116: ti_tmp116@4b {
+		compatible = "ti,tmp116";
+		reg = <0x48>;
+		label = "TMP116";
+	};
+};
 
 &flash0 {
 

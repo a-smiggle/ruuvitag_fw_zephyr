@@ -13,6 +13,7 @@
 #include "battery_handler.h"
 #include "board_info.h"
 #include "led_handler.h"
+#include "tmp117_handler.h"
 
 #include <logging/log.h>
 LOG_MODULE_REGISTER(endpoint, CONFIG_RUUVITAG_LOG_LEVEL);
@@ -20,6 +21,9 @@ LOG_MODULE_REGISTER(endpoint, CONFIG_RUUVITAG_LOG_LEVEL);
 static bool has_lis2dh12 = false;
 static bool has_bme280 = false;
 static bool has_adc = false;
+static bool has_tmp117 = false;
+
+
 
 static bool device_mac_rx = false;
 mac_address_bin_t device_mac;
@@ -37,22 +41,22 @@ static int8_t tx_pwr = RUUVI_TX_POWER;
  * Data found here is not as accurate as found in on current ruuvi fw.
  */
 static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
-	data[0 + offset]    =   RUUVI_RAWv2;
-	int32_t t 			= 	temperature * 2;
+    data[0 + offset]    =   RUUVI_RAWv2;
+    int32_t t 			= 	temperature * 2;
     data[1 + offset] 	= 	((t) >> 8);
-	data[2 + offset] 	= 	((t) & 0xFF);
-	uint32_t h 			= 	humidity * 400 / 1024;
-	data[3 + offset] 	= 	((h)>>8);
-	data[4 + offset] 	= 	((h) & 0xFF);
-	data[5 + offset] 	= 	((pressure)>>8);
-	data[6 + offset] 	= 	((pressure) & 0xFF);
-	data[7 + offset] 	= 	((x)>>8);
-	data[8 + offset] 	= 	((x) & 0xFF);
-	data[9 + offset] 	= 	((y)>>8);
-	data[10 + offset] 	= 	((y) & 0xFF);
-	data[11 + offset] 	= 	((z)>>8);
-	data[12 + offset] 	= 	((z) & 0xFF);
-	vbatt 				-= 	1600; //Bias by 1600 mV
+    data[2 + offset] 	= 	((t) & 0xFF);
+    uint32_t h 			= 	humidity * 400 / 1024;
+    data[3 + offset] 	= 	((h)>>8);
+    data[4 + offset] 	= 	((h) & 0xFF);
+    data[5 + offset] 	= 	((pressure)>>8);
+    data[6 + offset] 	= 	((pressure) & 0xFF);
+    data[7 + offset] 	= 	((x)>>8);
+    data[8 + offset] 	= 	((x) & 0xFF);
+    data[9 + offset] 	= 	((y)>>8);
+    data[10 + offset] 	= 	((y) & 0xFF);
+    data[11 + offset] 	= 	((z)>>8);
+    data[12 + offset] 	= 	((z) & 0xFF);
+    vbatt 				-= 	1600; //Bias by 1600 mV
     vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
     data[13 + offset] 	= 	(vbatt)>>8;
     data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
@@ -61,19 +65,19 @@ static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
 	tx 				+= 40;
     tx 				/= 2;
     data[14 + offset] 	|= 	((uint8_t)tx)&0x1F; //5 lowest bits for TX pwr
-	data[15 + offset] 	= 	acceleration_events % 256;
-	data[16 + offset] 	= 	(packet_counter>>8);
-	data[17 + offset] 	= 	(packet_counter&0xFF);
+    data[15 + offset] 	= 	acceleration_events % 256;
+    data[16 + offset] 	= 	(packet_counter>>8);
+    data[17 + offset] 	= 	(packet_counter&0xFF);
     if(!device_mac_rx){
         get_mac(&device_mac);
         device_mac_rx = true;
     }
     data[18 + offset] 	= device_mac.mac[5]; 
-	data[19 + offset] 	= device_mac.mac[4];
-	data[20 + offset] 	= device_mac.mac[3];
-	data[21 + offset] 	= device_mac.mac[2];
-	data[22 + offset] 	= device_mac.mac[1]; 
-	data[23 + offset] 	= device_mac.mac[0];
+    data[19 + offset] 	= device_mac.mac[4];
+    data[20 + offset] 	= device_mac.mac[3];
+    data[21 + offset] 	= device_mac.mac[2];
+    data[22 + offset] 	= device_mac.mac[1]; 
+    data[23 + offset] 	= device_mac.mac[0];
     ++packet_counter;
 }
 
@@ -105,24 +109,38 @@ static void ruuvi_update_lis2dh(void){
     LOG_DBG("X: %d, Y: %d, Z: %d", x, y, z);
 }
 
+static void ruuvi_update_tmp117(void){
+    tmp117_fetch();
+    temperature = 	tmp117_get_temp();				
+    LOG_DBG("Temperature: %d", temperature);
+}
+
 void ruuvi_endpoint_sensor_check(void){
     has_adc = init_adc();
 	if (!has_adc) {
 		LOG_ERR("Failed to initialize ADC\n");
-		flash_red();
+		//flash_red();
 	}
 
 	has_bme280 = init_bme280();
 	if (!has_bme280) {
 		LOG_ERR("Failed to initialize BME280\n");
-		flash_red();
+		//flash_red();
 	}
 	
 	has_lis2dh12 = init_lis2dh12();
 	if (!has_lis2dh12) {
 		LOG_ERR("Failed to initialize LIS2DH12\n");
+		//flash_red();
+	}
+	has_tmp117 = init_tmp117();
+	if (!has_tmp117) {
+		LOG_ERR("Failed to initialize TMP117\n");										 
 		flash_red();
 	}
+
+
+
     return;
 }
 
@@ -141,6 +159,10 @@ void ruuvi_update_endpoint(uint8_t* data)
     }
     if (has_lis2dh12){
         ruuvi_update_lis2dh();
+    }
+
+    if (has_tmp117){
+		ruuvi_update_tmp117();
     }
 	/*
 	 * Allows for Ruuvi RAWv2 to be used as the data packet.
