@@ -23,8 +23,6 @@ static bool has_bme280 = false;
 static bool has_adc = false;
 static bool has_tmp117 = false;
 
-
-
 static bool device_mac_rx = false;
 mac_address_bin_t device_mac;
 static int32_t temperature = 0;
@@ -111,7 +109,7 @@ static void ruuvi_update_lis2dh(void){
 
 static void ruuvi_update_tmp117(void){
     tmp117_fetch();
-    temperature = 	tmp117_get_temp();				
+    temperature = 	tmp117_get_temp();
     LOG_DBG("Temperature: %d", temperature);
 }
 
@@ -135,12 +133,9 @@ void ruuvi_endpoint_sensor_check(void){
 	}
 	has_tmp117 = init_tmp117();
 	if (!has_tmp117) {
-		LOG_ERR("Failed to initialize TMP117\n");										 
+		LOG_ERR("Failed to initialize TMP117\n");
 		flash_red();
 	}
-
-
-
     return;
 }
 
