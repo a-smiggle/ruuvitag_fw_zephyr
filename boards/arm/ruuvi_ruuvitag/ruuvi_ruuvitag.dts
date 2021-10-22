@@ -12,11 +12,6 @@
 	compatible = "ruuvi,ruuvitag";
 
 	chosen {
-		zephyr,console = &uart0;
-		zephyr,shell-uart = &uart0;
-		zephyr,uart-mcumgr = &uart0;
-		zephyr,bt-mon-uart = &uart0;
-		zephyr,bt-c2h-uart = &uart0;
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &slot0_partition;
@@ -60,16 +55,6 @@
 
 &gpio0 {
 	status = "okay";
-};
-
-&uart0 {
-	status = "okay";
-	compatible = "nordic,nrf-uart";
-	current-speed = <115200>;
-	tx-pin = <5>;
-	rx-pin = <4>;
-	cts-pin = <31>;
-	rts-pin = <30>;
 };
 
 &spi0 {
