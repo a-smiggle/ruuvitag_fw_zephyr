@@ -39,7 +39,6 @@
 #include "nfc_handler.h"
 #include "bt_handler.h"
 
-
 #include <logging/log.h>
 LOG_MODULE_REGISTER(ruuvitag, CONFIG_RUUVITAG_LOG_LEVEL);
 
