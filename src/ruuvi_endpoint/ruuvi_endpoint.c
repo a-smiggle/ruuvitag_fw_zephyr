@@ -119,19 +119,19 @@ void ruuvi_endpoint_sensor_check(void){
     has_adc = init_adc();
 	if (!has_adc) {
 		LOG_ERR("Failed to initialize ADC\n");
-		//flash_red();
+		flash_red();
 	}
 
 	has_bme280 = init_bme280();
 	if (!has_bme280) {
 		LOG_ERR("Failed to initialize BME280\n");
-		//flash_red();
+		flash_red();
 	}
 	
 	has_lis2dh12 = init_lis2dh12();
 	if (!has_lis2dh12) {
 		LOG_ERR("Failed to initialize LIS2DH12\n");
-		//flash_red();
+		flash_red();
 	}
 	has_tmp117 = init_tmp117();
 	if (!has_tmp117) {
