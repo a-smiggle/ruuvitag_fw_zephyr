@@ -60,6 +60,8 @@ Supported Features
 +-----------+------------+----------------------+
 | SPI       | on-chip    | spi                  |
 +-----------+------------+----------------------+
+| I2C       | on-chip    | i2c             |
++-----------+------------+----------------------+
 | UART      | on-chip    | serial               |
 +-----------+------------+----------------------+
 | WDT       | on-chip    | watchdog             |
@@ -95,8 +97,8 @@ Pin descriptions
 
 * 2 = P0.29 = SPI_SCK
 * 3 = P0.28 = SPI_MISO
-* 10 = P0.04 = GPIO (can be used as a GPIO / ADC pin)
-* 11 = P0.05 = GPIO (can be used as a GPIO / ADC pin)
+* 10 = P0.04 = SDA  // sda-i2c  tmp117 sensor HW schematic Rev B.8
+* 11 = P0.05 = SCL  // scl-i2c  tmp117 sensor
 * 12 = P0.25 = SPI_MOSI
 * 13 = P0.19 = LED2 (green) / GPIO (can be used as a GPIO pin but the LED will blink)
 * 14 = P0.17 = LED1 (red) / GPIO (can be used as a GPIO pin but the LED will blink)
@@ -184,3 +186,4 @@ References
 .. _ruuvitag website: https://ruuvi.com
 .. _ruuvitag datasheet: https://ruuvi.com/files/ruuvitag-tech-spec-2019-7.pdf
 .. _ruuvitag devkit: https://lab.ruuvi.com/devshield/
+.. _ruuvitag harware Rev b8: https://github.com/ruuvi/ruuvitag_hw/tree/master/ruuvitag_revb8
