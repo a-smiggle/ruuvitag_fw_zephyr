@@ -1,15 +1,6 @@
 name: Build and Release
 
-on:
-  push:
-    paths:
-      - "**.c"
-      - "**.h"
-      - "CMakeLists.txt"
-      - "Kconfig"
-      - "Makefile"
-      - ".github/workflows/build-and-release.yaml"
-      - "*.conf"
+on: [push, pull_request]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
