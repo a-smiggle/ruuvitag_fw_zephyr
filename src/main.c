@@ -86,7 +86,7 @@ static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 	
 	if (btn_time - lastPressed > 1000){
 		toggle_red(1);
-		toogle_green(1);
+		toggle_green(1);
 	}
 	lastPressed = btn_time;
 }
