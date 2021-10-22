@@ -85,6 +85,7 @@ static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 	
 	if (btn_time - lastPressed > 1000){
 		toggle_red(1);
+		toggle_green(1);
 	}
 	lastPressed = btn_time;
 }
@@ -132,7 +133,6 @@ void main(void)
 		bt_update_packet();
 		/* Turn LEDs off */
 		toggle_green(0);
-		toggle_red(0);
 #if CONFIG_RUUVITAG_NFC_SENSOR_DATA
 		if(k_uptime_get() - last_nfc_update > RUUVI_NFC_REFRESH){
 			ruuvi_nfc_update();
