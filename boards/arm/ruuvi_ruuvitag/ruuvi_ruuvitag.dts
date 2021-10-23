@@ -22,6 +22,8 @@
 		led0 = &led0;
 		led1 = &led1;
 		sw0 = &button0;
+                power1 = &power1;
+                power2 = &power2;
 	};
 
 	leds {
@@ -45,7 +47,8 @@
 	};
 
 	powerpins {
-		compatible = "gpio-powerpins";
+		compatible = "gpio-leds";
+                status = "okay";
 		power1: power_1 {
 			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
 			label = "Power 1";
@@ -98,7 +101,6 @@
 	status = "okay";
 	sda-pin = <4>; // RuuviTag Revision b8
 	scl-pin = <5>;
-	//sensor_pwr1 = <&gpio0 12 GPIO_ACTIVE_LOW>;
 		ti_tmp116: ti_tmp116@4b {
 		compatible = "ti,tmp116";
 		reg = <0x48>;
