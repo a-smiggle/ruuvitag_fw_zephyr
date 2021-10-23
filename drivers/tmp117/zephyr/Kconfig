@@ -1,0 +1,10 @@
+# TMP117 temperature sensor configuration options
+
+# Copyright (c) 2019 Centaur Analytics, Inc
+# SPDX-License-Identifier: Apache-2.0
+
+config TMP117
+	bool "TMP117 Temperature Sensors"
+	depends on I2C
+	help
+	  Enable driver for TMP117 temperature sensors.
