@@ -22,6 +22,8 @@
 		led0 = &led0;
 		led1 = &led1;
 		sw0 = &button0;
+                power1 = &power1;
+                power2 = &power2;
 	};
 
 	leds {
@@ -43,6 +45,20 @@
 			label = "Push button switch 0";
 		};
 	};
+
+	powerpins {
+		compatible = "gpio-leds";
+                status = "okay";
+		power1: power_1 {
+			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+			label = "Power 1";
+		};
+		power2: power_2 {
+			gpios = <&gpio0 07 GPIO_ACTIVE_LOW>;
+			label = "Power 2";
+		};
+	};
+
 };
 
 &adc {
@@ -85,10 +101,10 @@
 	status = "okay";
 	sda-pin = <4>; // RuuviTag Revision b8
 	scl-pin = <5>;
-        ti_tmp116: ti_tmp116@4b {
-		compatible = "ti,tmp116";
+		ti_tmp117: ti_tmp117@4b {
+		compatible = "ti,tmp117";
 		reg = <0x48>;
-		label = "TMP116";
+		label = "TMP117";
 	};
 };
 

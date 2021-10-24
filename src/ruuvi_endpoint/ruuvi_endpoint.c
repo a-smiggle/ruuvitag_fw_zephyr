@@ -40,10 +40,10 @@ static int8_t tx_pwr = RUUVI_TX_POWER;
  */
 static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
     data[0 + offset]    =   RUUVI_RAWv2;
-    int32_t t 			= 	temperature * 2;
+    int32_t t 		= 	temperature * 2;
     data[1 + offset] 	= 	((t) >> 8);
     data[2 + offset] 	= 	((t) & 0xFF);
-    uint32_t h 			= 	humidity * 400 / 1024;
+    uint32_t h 		= 	humidity * 400 / 1024;
     data[3 + offset] 	= 	((h)>>8);
     data[4 + offset] 	= 	((h) & 0xFF);
     data[5 + offset] 	= 	((pressure)>>8);
@@ -60,7 +60,7 @@ static void ruuvi_raw_v2_encode(uint8_t *data, uint8_t offset){
     data[14 + offset] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
 	int8_t tx = tx_pwr;
     /* Prepare TX power for packet */
-	tx 				+= 40;
+    tx 				+= 40;
     tx 				/= 2;
     data[14 + offset] 	|= 	((uint8_t)tx)&0x1F; //5 lowest bits for TX pwr
     data[15 + offset] 	= 	acceleration_events % 256;
@@ -109,7 +109,7 @@ static void ruuvi_update_lis2dh(void){
 
 static void ruuvi_update_tmp117(void){
     tmp117_fetch();
-    temperature = 	tmp117_get_temp();
+    temperature =tmp117_get_temp();
     LOG_DBG("Temperature: %d", temperature);
 }
 
