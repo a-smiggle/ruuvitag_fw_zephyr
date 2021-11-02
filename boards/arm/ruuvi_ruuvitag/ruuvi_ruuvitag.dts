@@ -22,8 +22,8 @@
 		led0 = &led0;
 		led1 = &led1;
 		sw0 = &button0;
-                power1 = &power1;
-                power2 = &power2;
+		snp1 = &snp1;
+		snp2 = &snp2;
 	};
 
 	leds {
@@ -46,14 +46,13 @@
 		};
 	};
 
-	powerpins {
-		compatible = "gpio-leds";
-                status = "okay";
-		power1: power_1 {
+	sensor_power {
+		compatible = "gpio-keys";
+		snp1: sensor_power_1 {
 			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
 			label = "Power 1";
 		};
-		power2: power_2 {
+		snp2: sensor_power_2 {
 			gpios = <&gpio0 07 GPIO_ACTIVE_LOW>;
 			label = "Power 2";
 		};
@@ -99,12 +98,14 @@
 &i2c1 {
 	compatible = "nordic,nrf-twi";
 	status = "okay";
-	sda-pin = <4>; // RuuviTag Revision b8
+	sda-pin = <4>;
 	scl-pin = <5>;
-		ti_tmp117: ti_tmp117@b8 {
+
+	ti_tmp117: ti_tmp117@48 {
 		compatible = "ti,tmp117";
 		reg = <0x48>;
 		label = "TMP117";
+		alert-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
 	};
 };
 

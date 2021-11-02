@@ -18,7 +18,6 @@
 #include <drivers/sensor.h>
 
 #include "led_handler.h"
-#include "ruuvi_endpoint.h"
 #include "board_info.h"
 #include "ruuvi.h"
 
@@ -76,7 +75,7 @@ static void nfc_callback(void *context,
 /**
  * @brief Function for filling the static data buffers.
  */
-static void ruuvi_nfc_fill_static_data(void){
+static void nfc_fill_static_data(void){
 	strcpy(os_payload, "Zephyr: ");
 	strcat(os_payload, "2.4.99");
 	strcpy(ncs_payload, "NCS: ");
@@ -110,8 +109,8 @@ static void ruuvi_nfc_fill_static_data(void){
 /**
  * @brief Function for filling the RAWv2 data buffer.
  */
-static void ruuvi_nfc_fill_sensor_data(void){	
-	ruuvi_update_nfc_endpoint(data_payload_raw);
+static void nfc_fill_sensor_data(void)
+{	
 	sprintf(data_payload, 
 	"Data: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", 
 			data_payload_raw[0], data_payload_raw[1], data_payload_raw[2], data_payload_raw[4],
@@ -125,16 +124,16 @@ static void ruuvi_nfc_fill_sensor_data(void){
 /**
  * @brief Function for encoding the NDEF text message.
  */
-static int ruuvi_nfc_msg_encode(uint8_t *buffer, uint32_t *len)
+static int nfc_msg_encode(uint8_t *buffer, uint32_t *len)
 {
 	int err;
 
 	if (!atomic_get(&nfc_setup)){
-		ruuvi_nfc_fill_static_data();
+		nfc_fill_static_data();
 		atomic_set(&nfc_setup, 1);
 	}
 	
-	ruuvi_nfc_fill_sensor_data();
+	nfc_fill_sensor_data();
 
 	/* Create NFC NDEF text record for Zephyr version */
 	NFC_NDEF_TEXT_RECORD_DESC_DEF(nfc_os_text_rec, UTF_8,
@@ -223,7 +222,7 @@ static int ruuvi_nfc_msg_encode(uint8_t *buffer, uint32_t *len)
  * @brief Function allow the controlling of the NFC records on 
  * INIT and UPDATE calls.
  */
-static void ruuvi_update_nfc_records(struct k_work *work){
+static void update_nfc_records(struct k_work *work){
 	uint32_t len = sizeof(ndef_msg_buf);
 	uint8_t nfc_update = atomic_get(&nfc_setup);
 	if(nfc_update){
@@ -236,7 +235,7 @@ static void ruuvi_update_nfc_records(struct k_work *work){
 	}
 
 	/* Encode messages */
-	if (ruuvi_nfc_msg_encode(ndef_msg_buf, &len) < 0) {
+	if (nfc_msg_encode(ndef_msg_buf, &len) < 0) {
 		LOG_ERR("Cannot encode message!");
 	}
 
@@ -261,21 +260,22 @@ static void ruuvi_update_nfc_records(struct k_work *work){
 /**
  * @brief Function for updating NFC records..
  */
-void ruuvi_nfc_update(void){
+void nfc_update(const ble_data_t * const buffer){
+	memcpy(data_payload_raw, buffer->data, sizeof(data_payload_raw));
 	k_work_submit(&nfc_work);
 }
 
 /**
  * @brief Function for setting up NFC.
  */
-void ruuvi_nfc_init(void){
+void nfc_init(void){
 	/* Set up NFC */
 	if (nfc_t2t_setup(nfc_callback, NULL) < 0) {
 		LOG_ERR("Cannot setup NFC T2T library!\n");
 		return;
 	}
 
-	k_work_init(&nfc_work, ruuvi_update_nfc_records);
+	k_work_init(&nfc_work, update_nfc_records);
 
 	k_work_submit(&nfc_work);
 }

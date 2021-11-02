@@ -64,6 +64,24 @@ typedef struct mac_address_bin
     uint8_t mac[6];
 } mac_address_bin_t;
 
+typedef struct sensor_data
+{
+    int16_t x;
+    int16_t y;
+    int16_t z;
+    int16_t vbatt;
+    int32_t temperature;
+    uint16_t pressure;
+    uint32_t humidity;
+
+} sensor_data_t;
+
+typedef struct ble_data
+{
+    uint8_t id[2];
+    uint8_t data[24];
+} ble_data_t;
+
 /* The devicetree node identifier for the "sw0" alias. */
 #define SW0_NODE	DT_ALIAS(sw0)
 

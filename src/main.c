@@ -31,13 +31,11 @@
 #include "ruuvi.h"
 #include "led_handler.h"
 #include "button_handler.h"
-#include "bme280_handler.h"
-#include "lis2dh12_handler.h"
-#include "battery_handler.h"
 #include "board_info.h"
-#include "ruuvi_endpoint.h"
-#include "nfc_handler.h"
 #include "bt_handler.h"
+
+#include "sensor_handler.h"
+#include "nfc_handler.h"
 
 #include <logging/log.h>
 LOG_MODULE_REGISTER(ruuvitag, CONFIG_RUUVITAG_LOG_LEVEL);
@@ -70,9 +68,6 @@ static void dfu_init(void){
 #endif
 }
 
-#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
-static int64_t last_nfc_update = 0;
-#endif
 static int64_t lastPressed = 0;
 static int64_t btn_time = 0;
 
@@ -90,11 +85,8 @@ static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 	lastPressed = btn_time;
 }
 
-void main(void)
-{	
-	LOG_INF("Ruuvitag Started");
-	LOG_INF("Version: %s", log_strdup(CONFIG_RUUVITAG_APP_VERSION));
-	
+static void init_peripherals(void)
+{
 	led_init();
 
 	button_init();
@@ -112,7 +104,15 @@ void main(void)
 	 * Initialises the sensors and makes them ready to fill the
 	 * BLE TX buffer.
 	 */
-	ruuvi_endpoint_sensor_check();
+	sensor_init();
+}
+
+void main(void)
+{	
+	LOG_INF("Ruuvitag Started");
+	LOG_INF("Version: %s", log_strdup(CONFIG_RUUVITAG_APP_VERSION));
+
+	init_peripherals();
 
 	/*
 	 * Enables the filsesystem and mgmt groups that are required to
@@ -122,24 +122,14 @@ void main(void)
 
 	/* Initialize the Bluetooth Subsystem.*/
 	bt_init();
-
 	/* NFC must be done after BT so that MAC can be received. */
-	ruuvi_nfc_init();
-#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
-	last_nfc_update = k_uptime_get();
-#endif
+	nfc_init();
 	while (true) {
 		toggle_green(1);
-		bt_update_packet();
+		udpate_sensor_data();
 		/* Turn LEDs off */
 		toggle_green(0);
-#if CONFIG_RUUVITAG_NFC_SENSOR_DATA
-		if(k_uptime_get() - last_nfc_update > RUUVI_NFC_REFRESH){
-			ruuvi_nfc_update();
-			last_nfc_update = k_uptime_get();
-		}
-#endif
-
+		toggle_red(0);
 		k_sleep(K_MSEC(980));
 	}
 }

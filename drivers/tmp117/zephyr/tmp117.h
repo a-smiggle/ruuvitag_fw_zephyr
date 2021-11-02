@@ -5,7 +5,7 @@
  */
 
 #ifndef ZEPHYR_DRIVERS_SENSOR_TMP117_TMP117_H_
-#define ZEPHYR_DRIVERS_SENSOR_tmp117_tmp117_H_
+#define ZEPHYR_DRIVERS_SENSOR_TMP117_TMP117_H_
 
 #define tmp117_REG_TEMP				0x0
 #define tmp117_REG_CFGR				0x1
@@ -64,11 +64,11 @@ struct tmp117_dev_config {
 	char *i2c_bus_label;
 };
 
-static int tmp117_sample_fetch(const struct device *dev,enum sensor_channel chan);
+/*static int tmp117_sample_fetch(const struct device *dev,enum sensor_channel chan);
 static int tmp117_channel_get(const struct device *dev,enum sensor_channel chan,struct sensor_value *val);
 static int tmp117_init(const struct device *dev);
 static int tmp117_soft_reset(const struct device *dev);
-static int tmp117_sleep(const struct device *dev);
+static int tmp117_sleep(const struct device *dev);*/
 
 
 #endif /*  ZEPHYR_DRIVERS_SENSOR_tmp117_tmp117_H_ */

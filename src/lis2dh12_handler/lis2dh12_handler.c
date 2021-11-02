@@ -19,9 +19,6 @@ struct lis2dh12_sample lis2dh12_sample;
 void lis2dh12_fetch(void)
 {
 	lis2dh12_get_acc_sample(lis2dh12, &lis2dh12_sample);
-	//LOG_INF("x: %d, ", lis2dh12_sample.acc_mg[0]);
-	//LOG_INF("y: %d, ", lis2dh12_sample.acc_mg[1]);
-	//LOG_INF("z: %d\n", lis2dh12_sample.acc_mg[2]);
 }
 
 int16_t lis2dh12_get(int axis){

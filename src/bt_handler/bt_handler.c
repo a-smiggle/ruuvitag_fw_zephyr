@@ -15,7 +15,6 @@
 #include <mgmt/mcumgr/smp_bt.h>
 #endif
 
-#include "ruuvi_endpoint.h"
 #include "ruuvi.h"
 #include <logging/log.h>
 LOG_MODULE_REGISTER(bt_handler, CONFIG_RUUVITAG_LOG_LEVEL);
@@ -100,16 +99,17 @@ static void advertise(struct k_work *work)
 	}
 	mfg_data[0] = 0x99;
 	mfg_data[1] = 0x04;
-    ruuvi_update_endpoint(mfg_data);
-		/* Update advertisement data */
+	/* Update advertisement data */
 	bt_le_adv_update_data(bc, ARRAY_SIZE(bc), sd, ARRAY_SIZE(sd));
 
 	LOG_INF("Ruuvitag is now beaconing.");
 }
 
-void bt_update_packet(void){
-    ruuvi_update_endpoint(mfg_data);
-		/* Update advertisement data */
+void bt_update_packet(const ble_data_t * const buffer){
+    memset(mfg_data, 0, sizeof(mfg_data));
+	memcpy(mfg_data, buffer->id, 2);
+	memcpy(mfg_data + 2, buffer->data, 24);
+	/* Update advertisement data */
 	bt_le_adv_update_data(bc, ARRAY_SIZE(bc), sd, ARRAY_SIZE(sd));
 	LOG_DBG("Updating BLE packet");
 }

@@ -11,7 +11,7 @@
 #include "bme280_handler.h"
 
 #include <logging/log.h>
-LOG_MODULE_REGISTER(bme280, CONFIG_RUUVITAG_LOG_LEVEL);
+LOG_MODULE_REGISTER(bme280_handler, CONFIG_RUUVITAG_LOG_LEVEL);
 
 #define BME280 DT_INST(0, bosch_bme280)
 

@@ -6,8 +6,8 @@
 #ifndef RUUVI_ENDPOINT_H_
 #define RUUVI_ENDPOINT_H_
 
-void ruuvi_endpoint_sensor_check(void);
-void ruuvi_update_nfc_endpoint(uint8_t* data);
-void ruuvi_update_endpoint(uint8_t* data);
+#include "ruuvi.h"
+
+void ruuvi_raw_v2_encode(uint8_t *data, sensor_data_t sensor_data, uint16_t acc_events );
 
 #endif /* RUUVI_ENDPOINT_H_ */

@@ -18,11 +18,14 @@ zephyr_include_directories(src)
 
 add_subdirectory(src/led_handler)
 add_subdirectory(src/button_handler)
-add_subdirectory(src/bme280_handler)
-add_subdirectory(src/lis2dh12_handler)
-add_subdirectory(src/battery_handler)
 add_subdirectory(src/board_info)
 add_subdirectory(src/ruuvi_endpoint)
 add_subdirectory(src/nfc_handler)
 add_subdirectory(src/bt_handler)
+
+###############Sensors###############
+add_subdirectory(src/sensor_handler)
 add_subdirectory(src/tmp117_handler)
+add_subdirectory(src/bme280_handler)
+add_subdirectory(src/lis2dh12_handler)
+add_subdirectory(src/battery_handler)

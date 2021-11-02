@@ -6,7 +6,9 @@
 #ifndef NFC_HANDLER_H_
 #define NFC_HANDLER_H_
 
-void ruuvi_nfc_update(void);
-void ruuvi_nfc_init(void);
+#include "ruuvi.h"
+
+void nfc_update(const ble_data_t * const buffer);
+void nfc_init(void);
 
 #endif /* NFC_HANDLER_H_ */

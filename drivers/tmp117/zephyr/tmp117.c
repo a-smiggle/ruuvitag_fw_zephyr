@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#ifdef CONFIG_TMP117
+
 #define DT_DRV_COMPAT ti_tmp117
 
 #include <device.h>
@@ -12,12 +14,12 @@
 #include <sys/util.h>
 #include <sys/byteorder.h>
 #include <sys/__assert.h>
-#include <logging/log.h>
 #include <kernel.h>
 
 #include "tmp117.h"
 
-LOG_MODULE_REGISTER(tmp117, CONFIG_SENSOR_LOG_LEVEL);
+#include <logging/log.h>
+LOG_MODULE_REGISTER(tmp117, CONFIG_TMP117_LOG_LEVEL);
 
 static int tmp117_reg_read(const struct device *dev, uint8_t reg,
 			   uint16_t *val)
@@ -200,7 +202,7 @@ static int tmp117_init(const struct device *dev)
 }
 
 
-
+/*
 static int tmp117_soft_reset(const struct device *dev)
   {
       uint16_t err_code;
@@ -221,7 +223,7 @@ static int tmp117_sleep(const struct device *dev)
       reg_val |= TMP117_VALUE_MODE_SLEEP;
       err_code |= tmp117_reg_write(dev, tmp117_REG_CFGR, reg_val);
       return  err_code;
-  }
+  }*/
 
 
 
@@ -236,3 +238,5 @@ static int tmp117_sleep(const struct device *dev)
 		CONFIG_SENSOR_INIT_PRIORITY, &tmp117_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(DEFINE_tmp117)
+
+#endif

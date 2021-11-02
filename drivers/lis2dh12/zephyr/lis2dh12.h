@@ -7,9 +7,6 @@
 extern "C" {
 #endif
 
-
-
-
 #include <kernel.h>
 #include <device.h>
 #include <sys/util.h>

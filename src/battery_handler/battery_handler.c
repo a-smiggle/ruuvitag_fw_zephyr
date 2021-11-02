@@ -12,7 +12,7 @@
 #include "battery_handler.h"
 
 #include <logging/log.h>
-LOG_MODULE_REGISTER(battery, CONFIG_RUUVITAG_LOG_LEVEL);
+LOG_MODULE_REGISTER(battery_handler, CONFIG_RUUVITAG_LOG_LEVEL);
 
 #define ADC_DEVICE_NAME			DT_LABEL(DT_INST(0, nordic_nrf_saadc))
 #define ADC_RESOLUTION			10

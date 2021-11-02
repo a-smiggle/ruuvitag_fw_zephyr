@@ -8,7 +8,7 @@
 
 void bt_init(void);
 
-void bt_update_packet(void);
+void bt_update_packet(const ble_data_t * const buffer);
 
 void bt_adv_stop(void);
 
