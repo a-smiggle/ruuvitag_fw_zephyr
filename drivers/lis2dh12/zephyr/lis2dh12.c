@@ -7,7 +7,6 @@
 #include <sys/util.h>
 #include <zephyr/types.h>
 
-
 #include <stdint.h>
 #include <string.h>
 

@@ -1,14 +1,85 @@
+# TMP117 temperature sensor configuration options
+
 menuconfig TMP117
 	bool "TMP117 Temperature Sensors"
 	depends on I2C
 	help
-	  Enable driver for TMP117 temperature sensors.
+	  Enable I2C driver for TMP117 temperature sensor.
 
 if TMP117
+
+config TMP117_INIT_PRIORITY
+	int "Sensor Init Priority"
+	range 0 100
+	default 90
 
 config TMP117_LOG_LEVEL
 	int "Log Level"
 	range 0 6
 	default 3
+
+choice
+	prompt "TMP117 Oversampling"
+	default TMP117_OS_1
+
+config TMP117_OS_1
+	bool "Oversampling 1x"
+
+config TMP117_OS_8
+	bool "Oversampling 8x"
+
+config TMP117_OS_32
+	bool "Oversampling 32x"
+
+config TMP117_OS_64
+	bool "Oversampling 64x"
+
+endchoice
+
+choice
+	prompt "TMP117 Samplerate"
+	default TMP117_16_MS
+
+config TMP117_16_MS
+	bool "Samplerate of 16ms"
+
+config TMP117_125_MS
+	bool "Samplerate of 125ms"
+
+config TMP117_250_MS
+	bool "Samplerate of 250ms"
+
+config TMP117_500_MS
+	bool "Samplerate of 500ms"
+
+config TMP117_1000_MS
+	bool "Samplerate of 1s"
+
+config TMP117_4000_MS
+	bool "Samplerate of 4s"
+
+config TMP117_8000_MS
+	bool "Samplerate of 8s"
+
+config TMP117_16000_MS
+	bool "Samplerate of 16s"
+
+endchoice
+
+choice
+	prompt "TMP117 Mode"
+	default TMP117_MODE_SINGLE
+
+config TMP117_MODE_SINGLE
+	bool "Single Mode"
+
+config TMP117_MODE_CONTINOUS
+	bool "Continous Mode"
+
+config TMP117_MODE_SLEEP
+	bool "Sleep Mode"
+
+endchoice
+
 
 endif #TMP117
