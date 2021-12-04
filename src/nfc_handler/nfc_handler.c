@@ -20,6 +20,7 @@
 #include "led_handler.h"
 #include "board_info.h"
 #include "ruuvi.h"
+#include "battery_handler.h"
 
 #include <logging/log.h>
 LOG_MODULE_REGISTER(nfc_handler, CONFIG_RUUVITAG_LOG_LEVEL);
