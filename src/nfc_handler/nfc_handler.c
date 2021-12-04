@@ -77,11 +77,11 @@ static void nfc_callback(void *context,
  */
 static void nfc_fill_static_data(void){
 	strcpy(os_payload, "Zephyr: ");
-	strcat(os_payload, "2.4.99");
+	strcat(os_payload, CONFIG_ZEPHYR_VERSION);
 	strcpy(ncs_payload, "NCS: ");
 	strcat(ncs_payload, NCS_VERSION_STRING);
-    strcpy(fw_payload, "FW: ");
-    strcat(fw_payload, CONFIG_RUUVITAG_APP_VERSION);
+        strcpy(fw_payload, "FW: ");
+        strcat(fw_payload, CONFIG_FIRMWARE_VERSION);
 
     mac_address_bin_t device_mac;
     get_mac(&device_mac);
@@ -104,6 +104,8 @@ static void nfc_fill_static_data(void){
 
     sprintf(id_payload, "ID: %s:%s:%s:%s:%s:%s:%s:%s", fragments[0], fragments[1],
 				fragments[2], fragments[3],fragments[4], fragments[5], fragments[6], fragments[7]);
+
+
 }
 
 /**

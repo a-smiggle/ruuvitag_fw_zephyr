@@ -8,9 +8,18 @@ menu "Ruuvitag"
 
 menu "Firmware versioning"
 
-config RUUVITAG_APP_VERSION
-	string "The version of the Ruuvitag firmware"
-	default "0.0.0"
+config FIRMWARE_VERSION
+		string "The version of the Ruuvitag firmware"
+		default "0.0.1"
+
+config ZEPHYR_VERSION
+		string "The version of Zephyr"
+		default "2.7.90"
+
+config NRF_CONNECT_SDK_VERSION
+		string "The version of Connect SDK"
+		default "1.7.1"
+
 
 endmenu # Firmware versioning
 

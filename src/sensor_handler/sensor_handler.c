@@ -161,7 +161,7 @@ void udpate_sensor_data(void)
 
 void sensor_init(void){
 	power_pin_init();
-	enable_sensor_power();
+	//enable_sensor_power();
 
     has_adc = init_adc();
 	if (!has_adc) {

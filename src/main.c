@@ -110,7 +110,7 @@ static void init_peripherals(void)
 void main(void)
 {	
 	LOG_INF("Ruuvitag Started");
-	LOG_INF("Version: %s", log_strdup(CONFIG_RUUVITAG_APP_VERSION));
+	LOG_INF("FW Version: %s", log_strdup(CONFIG_FIRMWARE_VERSION));
 
 	init_peripherals();
 
@@ -124,12 +124,12 @@ void main(void)
 	bt_init();
 	/* NFC must be done after BT so that MAC can be received. */
 	nfc_init();
+
 	while (true) {
 		toggle_green(1);
 		udpate_sensor_data();
 		/* Turn LEDs off */
 		toggle_green(0);
-		toggle_red(0);
-		k_sleep(K_MSEC(980));
+		k_sleep(K_MSEC(1000));
 	}
 }
