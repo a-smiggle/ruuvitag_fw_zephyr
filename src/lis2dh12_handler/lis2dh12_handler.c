@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+#ifdef CONFIG_LIS2DH12
+
 #include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
@@ -45,3 +47,4 @@ bool init_lis2dh12(void){
 		return true;
 	}
 }
+#endif

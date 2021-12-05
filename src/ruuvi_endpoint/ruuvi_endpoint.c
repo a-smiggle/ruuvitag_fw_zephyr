@@ -22,9 +22,9 @@ static int8_t tx_pwr = RUUVI_TX_POWER;
  * Data found here is not as accurate as found in on current ruuvi fw.
  */
 void ruuvi_raw_v2_encode(uint8_t *data, sensor_data_t sensor_data, uint16_t acc_events ){
-    static uint32_t packet_counter = 0;
+    static uint32_t packet_counter ;
     data[0]    =   RUUVI_RAWv2;
-    int32_t t 		= 	sensor_data.temperature * 2;
+    int32_t t 	= 	sensor_data.temperature * 2;
     data[1] 	= 	((t) >> 8);
     data[2] 	= 	((t) & 0xFF);
     uint32_t h 	= 	sensor_data.humidity * 400 / 1024;

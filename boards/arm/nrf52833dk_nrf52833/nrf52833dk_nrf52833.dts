@@ -209,9 +209,14 @@ arduino_serial: &uart1 {
 		reg = <0x70>;
 		label = "SHTCX";
                 chip = "shtc3";
-                measure-mode = "low_power";
+                measure-mode = "normal";
 	};
-
+	
+		DPS310@77 {
+		compatible = "infineon,dps310";
+		reg = <0x77>;
+		label = "DPS310";
+    };
 };
 
 

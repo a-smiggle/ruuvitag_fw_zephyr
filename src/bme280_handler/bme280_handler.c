@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
+#ifdef CONFIG_BME280
+
 #include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
 #include <drivers/sensor.h>
+
 #include "bme280_handler.h"
 
 #include <logging/log.h>
@@ -83,10 +86,12 @@ uint32_t bme280_get_humidity(void){
 }
 
 bool init_bme280(void){
-	bme280 = DEVICE_DT_GET_ANY(bosch_bme280);
+	bme280 = device_get_binding(DT_LABEL(DT_INST(0, bosch_bme280)));
 	if (bme280 == NULL) {
 		return false;
 	} else {
 		return true;
 	}
 }
+
+#endif

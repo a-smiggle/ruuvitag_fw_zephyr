@@ -112,9 +112,17 @@
 		compatible = "sensirion,shtcx";
 		reg = <0x70>;
 		label = "SHTCX";
-                chip = "shtc33";
-                measure-mode = "LOW_POWER";
+                chip = "shtc3";
+                measure-mode = "normal";
 	};
+
+      DPS310@77 {
+		//status = "okay";
+		compatible = "infineon,dps310";
+		reg = <0x77>;
+		label = "DPS310";
+                };
+
 };
 
 &flash0 {

@@ -4,11 +4,34 @@
 #include <sensor_handler.h>
 #include <drivers/gpio.h>
 
-#include "bme280_handler.h"
-#include "lis2dh12_handler.h"
 #include "battery_handler.h"
 #include "led_handler.h"
+
+#ifdef CONFIG_BME280
+#include "bme280_handler.h"
+static bool has_bme280 = false;
+#endif
+
+#ifdef CONFIG_TMP117
 #include "tmp117_handler.h"
+static bool has_tmp117 = false;
+#endif
+
+#ifdef CONFIG_LIS2DH12
+#include "lis2dh12_handler.h"
+static bool has_lis2dh12 = false;
+#endif
+
+#ifdef CONFIG_SHTCX
+#include "shtcx_handler.h"
+static bool has_shtcx = false;
+#endif
+
+#ifdef CONFIG_DPS310
+#include "dps310_handler.h"
+static bool has_dps310 = false;
+#endif
+
 
 #include "ruuvi_endpoint.h"
 #include "nfc_handler.h"
@@ -16,7 +39,7 @@
 #include "ruuvi.h"
 #include <logging/log.h>
 
-LOG_MODULE_REGISTER(sensor_handler, CONFIG_RUUVITAG_LOG_LEVEL);
+LOG_MODULE_REGISTER(sensor_handler);
 
 /* The devicetree node identifier for the "Sensor Power Pins" alias. */
 #define SNP1_NODE DT_ALIAS(snp1)
@@ -54,12 +77,7 @@ const struct device *sensor_pwr_2;
 static bool snp1_enabled = false;
 static bool snp2_enabled = false;
 
-static bool has_lis2dh12 = false;
-static bool has_bme280 = false;
 static bool has_adc = false;
-static bool has_tmp117 = false;
-static bool has_shctx = false;
-
 
 static uint16_t acceleration_events = 0;
 static int64_t battery_check = 0;
@@ -72,6 +90,7 @@ void enable_sensor_power(void){
 	snp2_enabled = true;
 	gpio_pin_set(sensor_pwr_1, SNP1_PIN, snp1_enabled);
 	gpio_pin_set(sensor_pwr_2, SNP2_PIN, snp2_enabled);
+
 }
 
 void disable_sensor_power_01(void){
@@ -118,17 +137,21 @@ static void update_battery(void){
 	}
 }
 
+
+#ifdef CONFIG_BME280
 static void update_bme(void){
     bme280_fetch();
     sensor_data.temperature = 	bme280_get_temp();
     sensor_data.pressure    = 	bme280_get_press();
     sensor_data.humidity    = 	bme280_get_humidity();
-    LOG_DBG("Temperature: %d, Pressure: %d, Humidity: %d", 
+    LOG_INF("Temperature: %d, Pressure: %d, Humidity: %d", 
                         sensor_data.temperature, 
                         sensor_data.pressure, 
                         sensor_data.humidity);
 }
+#endif
 
+#ifdef CONFIG_LIS2DH12
 static void update_lis2dh12(void){
     lis2dh12_fetch();
     sensor_data.x = lis2dh12_get(0);
@@ -136,14 +159,34 @@ static void update_lis2dh12(void){
     sensor_data.z = lis2dh12_get(2);
     LOG_DBG("X: %d, Y: %d, Z: %d", sensor_data.x, sensor_data.y, sensor_data.z);
 }
+#endif
 
+#ifdef CONFIG_SHTCX
+static void update_shtcx(void){
+    shtcx_fetch();
+    sensor_data.temperature = shtcx_get_temp();
+    sensor_data.humidity    = shtcx_get_humidity();
+    LOG_DBG("Temperature: %d, Humidity: %d",sensor_data.temperature, sensor_data.humidity);
+}
+#endif
+
+
+#ifdef CONFIG_DPS310
+static void update_dps310(void){
+    dps310_fetch();
+    sensor_data.temperature = dps310_get_temp();
+    LOG_DBG("Temperature: %d", sensor_data.temperature);
+}
+#endif
+
+
+#ifdef CONFIG_TMP117
 static void update_tmp117(void){
     tmp117_fetch();
     sensor_data.temperature = tmp117_get_temp();
     LOG_DBG("Temperature: %d", sensor_data.temperature);
 }
-
-
+#endif
 
 
 static void package_sensor_data(void)
@@ -158,52 +201,90 @@ void udpate_sensor_data(void)
     if (has_adc){
         update_battery();
     }
+#ifdef CONFIG_BME280
     if (has_bme280){
         update_bme();
     }
+#endif
+
+#ifdef CONFIG_LIS2DH12
     if (has_lis2dh12){
         update_lis2dh12();
     }
-    if (has_tmp117){
-		update_tmp117();
+#endif
+
+#ifdef CONFIG_SHTCX
+    if (has_shtcx){
+        update_shtcx();
     }
+#endif
+
+#ifdef CONFIG_DPS310 
+    if (has_dps310){
+	update_dps310();
+    }
+#endif
+
+#ifdef CONFIG_TMP117 
+    if (has_tmp117){
+	update_tmp117();
+    }
+#endif
+
 	package_sensor_data();
 }
 
 void sensor_init(void){
 	power_pin_init();
 	enable_sensor_power();
-        k_sleep(K_MSEC(5));
+        k_msleep(50);
+       
 
     has_adc = init_adc();
 	if (!has_adc) {
 		LOG_ERR("Failed to initialize ADC\n");
 		flash_red();
 	}
-
+#ifdef CONFIG_BME280
 	has_bme280 = init_bme280();
 	if (!has_bme280) {
 		LOG_ERR("Failed to initialize BME280\n");
 		flash_red();
 	}
-	
+#endif
+
+#ifdef CONFIG_LIS2DH12
 	has_lis2dh12 = init_lis2dh12();
 	if (!has_lis2dh12) {
 		LOG_ERR("Failed to initialize LIS2DH12\n");
 		flash_red();
 	}
+#endif
 
+#ifdef CONFIG_DPS310
+	has_dps310 = init_dps310();
+	if (!has_dps310) {
+		LOG_ERR("Failed to initialize DPS310\n");
+		flash_red();
+	}
+#endif
+
+#ifdef CONFIG_TMP117
 	has_tmp117 = init_tmp117();
 	if (!has_tmp117) {
 		LOG_ERR("Failed to initialize TMP117\n");
 		flash_red();
 	}
-
-	if(!has_tmp117) //&& other i2c devices
-	{
-		//disable_sensor_power();
+#endif
+ 
+#ifdef CONFIG_SHTCX
+        has_shtcx = init_shtcx();
+	if (!has_shtcx) {
+		LOG_ERR("Failed to initialize SHTCx\n");
+		flash_red();
 	}
-  
-        
+#endif
+
+
 
 }

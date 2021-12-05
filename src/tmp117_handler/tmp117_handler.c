@@ -1,12 +1,22 @@
+/*
+ * Copyright (c) 2020 
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+
+#ifdef CONFIG_TMP117
+
 #include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
+
 #include "tmp117.h"
 #include <tmp117_handler.h>
 
 #include <logging/log.h>
 
-LOG_MODULE_REGISTER(tmp117_handler, CONFIG_RUUVITAG_LOG_LEVEL);
+LOG_MODULE_REGISTER(tmp117_handler);
 
 const struct device *tmp117;
 
@@ -34,3 +44,4 @@ bool init_tmp117(void)
 		return true;
 	}
 }
+#endif
