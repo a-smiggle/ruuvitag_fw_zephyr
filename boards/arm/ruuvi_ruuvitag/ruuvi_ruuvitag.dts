@@ -107,6 +107,14 @@
 		label = "TMP117";
 		alert-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
 	};
+
+    sensirion_shtcx: shtcx@70 {
+		compatible = "sensirion,shtcx";
+		reg = <0x70>;
+		label = "SHTCX";
+                chip = "shtc33";
+                measure-mode = "LOW_POWER";
+	};
 };
 
 &flash0 {

@@ -27,7 +27,7 @@ void ruuvi_raw_v2_encode(uint8_t *data, sensor_data_t sensor_data, uint16_t acc_
     int32_t t 		= 	sensor_data.temperature * 2;
     data[1] 	= 	((t) >> 8);
     data[2] 	= 	((t) & 0xFF);
-    uint32_t h 		= 	sensor_data.humidity * 400 / 1024;
+    uint32_t h 	= 	sensor_data.humidity * 400 / 1024;
     data[3] 	= 	((h)>>8);
     data[4] 	= 	((h) & 0xFF);
     data[5] 	= 	((sensor_data.pressure)>>8);
@@ -39,14 +39,14 @@ void ruuvi_raw_v2_encode(uint8_t *data, sensor_data_t sensor_data, uint16_t acc_
     data[11] 	= 	((sensor_data.z)>>8);
     data[12] 	= 	((sensor_data.z) & 0xFF);
     int16_t vbatt = sensor_data.vbatt;
-    vbatt 				-= 	1600; //Bias by 1600 mV
+    vbatt 	+= 0	; //Bias by 1600 mV
     vbatt 				<<= 5;   //Shift by 5 to fit TX PWR in
     data[13] 	= 	(vbatt)>>8;
     data[14] 	= 	(vbatt)&0xFF; //Zeroes tx-pwr bits
 	int8_t tx = tx_pwr;
     /* Prepare TX power for packet */
-    tx 				+= 40;
-    tx 				/= 2;
+    tx 		+= 40;
+    tx 		/= 2;
     data[14] 	|= 	((uint8_t)tx)&0x1F; //5 lowest bits for TX pwr
     data[15] 	= 	acc_events % 256;
     data[16] 	= 	(packet_counter>>8);

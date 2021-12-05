@@ -9,10 +9,15 @@ toolchain:
 ram: 64
 flash: 512
 supported:
-  - ble
   - adc
+  - arduino_gpio
+  - arduino_i2c
+  - arduino_spi
+  - usb_device
+  - ble
   - gpio
-  - spi
-  - counter
-  - nvs
+  - ieee802154
+  - pwm
   - watchdog
+  - counter
+  - i2c

@@ -58,6 +58,9 @@ static bool has_lis2dh12 = false;
 static bool has_bme280 = false;
 static bool has_adc = false;
 static bool has_tmp117 = false;
+static bool has_shctx = false;
+
+
 static uint16_t acceleration_events = 0;
 static int64_t battery_check = 0;
 static sensor_data_t sensor_data = {0};
@@ -71,13 +74,18 @@ void enable_sensor_power(void){
 	gpio_pin_set(sensor_pwr_2, SNP2_PIN, snp2_enabled);
 }
 
-void disable_sensor_power(void){
+void disable_sensor_power_01(void){
 	LOG_DBG("Disabling Sensor Power Pins.\n");
 	snp1_enabled = false;
-	snp2_enabled = false;
 	gpio_pin_set(sensor_pwr_1, SNP1_PIN, snp1_enabled);
+}
+
+void disable_sensor_power_02(void){
+	LOG_DBG("Disabling Sensor Power Pins.\n");
+	snp2_enabled = false;
 	gpio_pin_set(sensor_pwr_2, SNP2_PIN, snp2_enabled);
 }
+
 
 void toggle_sensor_power(void)
 {
@@ -113,8 +121,8 @@ static void update_battery(void){
 static void update_bme(void){
     bme280_fetch();
     sensor_data.temperature = 	bme280_get_temp();
-    sensor_data.pressure 	= 	bme280_get_press();
-    sensor_data.humidity 	= 	bme280_get_humidity();
+    sensor_data.pressure    = 	bme280_get_press();
+    sensor_data.humidity    = 	bme280_get_humidity();
     LOG_DBG("Temperature: %d, Pressure: %d, Humidity: %d", 
                         sensor_data.temperature, 
                         sensor_data.pressure, 
@@ -134,6 +142,9 @@ static void update_tmp117(void){
     sensor_data.temperature = tmp117_get_temp();
     LOG_DBG("Temperature: %d", sensor_data.temperature);
 }
+
+
+
 
 static void package_sensor_data(void)
 {
@@ -161,7 +172,8 @@ void udpate_sensor_data(void)
 
 void sensor_init(void){
 	power_pin_init();
-	//enable_sensor_power();
+	enable_sensor_power();
+        k_sleep(K_MSEC(5));
 
     has_adc = init_adc();
 	if (!has_adc) {
@@ -189,6 +201,9 @@ void sensor_init(void){
 
 	if(!has_tmp117) //&& other i2c devices
 	{
-		disable_sensor_power();
+		//disable_sensor_power();
 	}
+  
+        
+
 }
