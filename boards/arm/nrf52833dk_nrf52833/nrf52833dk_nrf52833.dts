@@ -212,11 +212,7 @@ arduino_serial: &uart1 {
                 measure-mode = "normal";
 	};
 	
-		DPS310@77 {
-		compatible = "infineon,dps310";
-		reg = <0x77>;
-		label = "DPS310";
-    };
+		
 };
 
 

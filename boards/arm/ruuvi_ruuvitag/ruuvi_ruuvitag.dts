@@ -49,11 +49,11 @@
 	sensor_power {
 		compatible = "gpio-keys";
 		snp1: sensor_power_1 {
-			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 12 GPIO_ACTIVE_HIGH>;
 			label = "Power 1";
 		};
 		snp2: sensor_power_2 {
-			gpios = <&gpio0 07 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 07 GPIO_ACTIVE_HIGH>;
 			label = "Power 2";
 		};
 	};
@@ -116,13 +116,7 @@
                 measure-mode = "normal";
 	};
 
-      DPS310@77 {
-		//status = "okay";
-		compatible = "infineon,dps310";
-		reg = <0x77>;
-		label = "DPS310";
-                };
-
+    
 };
 
 &flash0 {
