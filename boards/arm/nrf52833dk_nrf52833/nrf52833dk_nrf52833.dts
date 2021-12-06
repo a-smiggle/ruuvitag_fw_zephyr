@@ -32,10 +32,10 @@
 			gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
 			label = "Green LED 1";
 		};
-		led2: led_2 {
+		/*led2: led_2 {
 			gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
 			label = "Green LED 2";
-		};
+		};*/
 	};
 
 	pwmleds {
@@ -65,11 +65,11 @@
 		};
 	};
 
-	sensor_power {
+	/*sensor_power {
 		compatible = "gpio-keys";
 								
 		snp1: sensor_power_1 {
-			gpios = <&gpio0 16 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 19 GPIO_ACTIVE_LOW>;
 			label = "Power 1";
 		};
 		snp2: sensor_power_2 {
@@ -77,7 +77,7 @@
 			label = "Power 2";
 		};
 	};
-
+*/
 	arduino_header: connector {
 		compatible = "arduino-header-r3";
 		#gpio-cells = <2>;
@@ -111,7 +111,7 @@
 	aliases {
 		led0 = &led0;
 		led1 = &led1;
-		led2 = &led2;
+		//led2 = &led2;
 		
 		pwm-led0 = &pwm_led0;
 		sw0 = &button0;
@@ -121,8 +121,8 @@
 		bootloader-led0 = &led0;
 		usbd0 = &usbd;
 		
-		snp1 = &snp1;
-		snp2 = &snp2;		
+		//snp1 = &snp1;
+		//snp2 = &snp2;		
 		};
 };
 
@@ -202,6 +202,7 @@ arduino_serial: &uart1 {
 		reg = <0x48>;
 		label = "TMP117";
 		//alert-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
+                supply-gpios= <&gpio0 15 GPIO_ACTIVE_LOW>;
 	};
 
 		sensirion_shtcx: shtcx@70 {
@@ -210,6 +211,7 @@ arduino_serial: &uart1 {
 		label = "SHTCX";
                 chip = "shtc3";
                 measure-mode = "normal";
+                supply-gpios= <&gpio0 15 GPIO_ACTIVE_HIGH>;
 	};
 	
 		

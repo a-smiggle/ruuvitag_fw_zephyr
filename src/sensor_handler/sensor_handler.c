@@ -42,6 +42,7 @@ static bool has_dps310 = false;
 LOG_MODULE_REGISTER(sensor_handler);
 
 /* The devicetree node identifier for the "Sensor Power Pins" alias. */
+/*
 #define SNP1_NODE DT_ALIAS(snp1)
 #define SNP2_NODE DT_ALIAS(snp2)
 
@@ -76,14 +77,14 @@ const struct device *sensor_pwr_2;
 
 static bool snp1_enabled = false;
 static bool snp2_enabled = false;
-
+*/
 static bool has_adc = false;
 
 static uint16_t acceleration_events = 0;
 static int64_t battery_check = 0;
 static sensor_data_t sensor_data = {0};
 static ble_data_t buffer = { .id = {0x99, 0x04}};
-
+/*
 void enable_sensor_power(void){
 	LOG_DBG("Enabling Sensor Power Pins.\n");
 	snp1_enabled = true;
@@ -127,7 +128,7 @@ void power_pin_init(void)
 	snp1_enabled = false;
 	snp2_enabled = false;
 	LOG_DBG("Power Pins Configured.\n");
-}
+}*/
 
 static void update_battery(void){
     if(k_uptime_get() - battery_check > 10000){
@@ -235,9 +236,9 @@ void udpate_sensor_data(void)
 }
 
 void sensor_init(void){
-	power_pin_init();
-	enable_sensor_power();
-        k_msleep(50);
+	//power_pin_init();
+	//enable_sensor_power();
+       // k_msleep(50);
        
 
     has_adc = init_adc();
