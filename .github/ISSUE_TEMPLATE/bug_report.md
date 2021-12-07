@@ -10,6 +10,12 @@ assignees: theBASTI0N
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**FW Used**
+* Firmware version:
+* Hardware:
+* Toolchain:
+* SDK:
+
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
