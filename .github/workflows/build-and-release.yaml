@@ -25,7 +25,7 @@ jobs:
 
       - name: Cache GCC ARM Embed binary
         id: cache-gcc-arm
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.6
         with:
           path: gcc-arm/
           key: ${{ runner.OS }}-gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux
@@ -43,7 +43,7 @@ jobs:
 
       - name: Cache NCS
         id: cache-ncs
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.6
         with:
           path: ncs/
           key: ${{ runner.OS }}-ncs
